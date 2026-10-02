@@ -4,82 +4,81 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.pedrorok.hypertube.blocks.HyperAcceleratorBlock;
 import com.pedrorok.hypertube.blocks.HyperEntranceBlock;
 import com.pedrorok.hypertube.blocks.blockentities.HyperEntranceBlockEntity;
-import com.pedrorok.hypertube.client.BezierTextureRenderer;
-import com.pedrorok.hypertube.core.connection.BezierConnection;
 import com.pedrorok.hypertube.registry.ModPartialModels;
-import com.pedrorok.hypertube.utils.RenderUtils;
-import com.zurrtum.create.client.content.kinetics.base.KineticBlockEntityRenderer;
 import com.zurrtum.create.client.catnip.render.CachedBuffers;
-import com.zurrtum.create.client.catnip.render.SuperByteBuffer;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import com.zurrtum.create.client.catnip.render.SuperByteBufferRenderState;
+import com.zurrtum.create.client.content.kinetics.base.KineticBlockEntityRenderer;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.client.renderer.feature.ModelFeatureRenderer.CrumblingOverlay;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author Rok, Pedro Lucas nmm. Created on 02/06/2025
  * @project Create Hypertube
  */
-public class EntranceBlockEntityRenderer extends KineticBlockEntityRenderer<HyperEntranceBlockEntity> {
-
-    private final BezierTextureRenderer tubeRenderer = BezierTextureRenderer.get();
+public class EntranceBlockEntityRenderer extends KineticBlockEntityRenderer<HyperEntranceBlockEntity, EntranceBlockEntityRenderer.State> {
 
     public EntranceBlockEntityRenderer(BlockEntityRendererProvider.Context context) {
         super(context);
     }
 
     @Override
-    protected void renderSafe(HyperEntranceBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource buffer,
-                              int light, int overlay) {
+    public State createRenderState() {
+        return new State();
+    }
+
+    @Override
+    public void extractRenderState(HyperEntranceBlockEntity be, State state, float tickProgress, Vec3 cameraPos,
+                                   @Nullable CrumblingOverlay crumblingOverlay) {
+        state.parts.clear();
+        state.cogwheel = null;
 
         BlockState blockState = be.getBlockState();
         if (!(blockState.getBlock() instanceof HyperEntranceBlock)) {
+            state.blockPos = be.getBlockPos();
+            state.blockEntityType = be.getType();
             return;
         }
+        updateBaseRenderState(be, state, be.getLevel(), crumblingOverlay);
 
         Direction facing = blockState.getValue(HyperAcceleratorBlock.FACING);
-        boolean isTubeOnVertical = facing.getAxis().isVertical();
-        be.getTubeAttachments().forEach((direct, attachment) -> {
-            SuperByteBuffer smartTubeModel = CachedBuffers.partial(attachment.getPartialModel(blockState, be, direct), blockState);
+        state.parts.addAttachments(be, blockState, facing, facing.getAxis().isVertical(), state.lightCoords);
 
-            RenderUtils.rotateToFace(smartTubeModel, facing, direct.getOpposite(), isTubeOnVertical);
-            smartTubeModel.light(light);
-            smartTubeModel.renderInto(ms, buffer.getBuffer(RenderType.translucent()));
-        });
+        float angle = getAngleForBe(be, state.blockPos, facing.getAxis());
+        state.cogwheel = CachedBuffers.partialFacingVertical(ModPartialModels.COGWHEEL_HOLE, blockState, facing)
+                .light(state.lightCoords)
+                .rotateCentered(angle, state.direction)
+                .color(state.color)
+                .extractRenderState();
 
+        state.parts.addTube(state.blockPos, be.getConnection());
+    }
 
-        SuperByteBuffer cogwheelModel = CachedBuffers.partialFacingVertical(ModPartialModels.COGWHEEL_HOLE, blockState, facing);
-
-        float angle = getAngleForBe(be, be.getBlockPos(), facing.getAxis());
-        Direction.Axis rotationAxisOf = getRotationAxisOf(be);
-
-
-        kineticRotationTransform(cogwheelModel, be, rotationAxisOf, angle, light);
-        cogwheelModel.renderInto(ms, buffer.getBuffer(RenderType.solid()));
-
-        if (be.getConnection() instanceof BezierConnection bezierConnection) {
-            tubeRenderer.renderBezierConnection(be.getBlockPos(), bezierConnection, ms, buffer, light, overlay);
+    @Override
+    public void submit(State state, PoseStack matrices, SubmitNodeCollector queue, CameraRenderState cameraState) {
+        if (state.cogwheel != null) {
+            state.cogwheel.submit(matrices, queue);
         }
+        state.parts.submit(matrices, queue);
     }
 
-
-
     @Override
-    public boolean shouldRenderOffScreen(HyperEntranceBlockEntity p_112306_) {
+    public boolean shouldRenderOffScreen() {
         return true;
     }
 
     @Override
-    public boolean shouldRender(HyperEntranceBlockEntity p_173568_, Vec3 p_173569_) {
+    public boolean shouldRender(HyperEntranceBlockEntity be, Vec3 cameraPos) {
         return true;
     }
 
-    @Override
-    public @NotNull AABB getRenderBoundingBox(@NotNull HyperEntranceBlockEntity blockEntity) {
-        return AABB.INFINITE;
+    public static class State extends KineticRenderState {
+        public final TubeRenderParts parts = new TubeRenderParts();
+        public @Nullable SuperByteBufferRenderState cogwheel;
     }
 }
