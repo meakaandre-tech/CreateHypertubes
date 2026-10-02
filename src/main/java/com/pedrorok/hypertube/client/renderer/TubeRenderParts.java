@@ -1,7 +1,7 @@
 package com.pedrorok.hypertube.client.renderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.pedrorok.hypertube.blocks.blockentities.ActionTubeBlockEntity;
+import com.pedrorok.hypertube.blocks.blockentities.parent.ActionTubeBlockEntity;
 import com.pedrorok.hypertube.client.BezierTextureRenderer;
 import com.pedrorok.hypertube.core.connection.BezierConnection;
 import com.pedrorok.hypertube.core.connection.interfaces.IConnection;
