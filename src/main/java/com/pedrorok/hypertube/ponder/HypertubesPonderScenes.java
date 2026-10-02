@@ -1,5 +1,7 @@
 package com.pedrorok.hypertube.ponder;
 
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.core.registries.BuiltInRegistries;
 import com.pedrorok.hypertube.ponder.scenes.AcceleratorScenes;
 import com.pedrorok.hypertube.ponder.scenes.AttachmentScenes;
 import com.pedrorok.hypertube.ponder.scenes.EntranceScenes;
@@ -7,8 +9,6 @@ import com.pedrorok.hypertube.ponder.scenes.SplitterScenes;
 import com.pedrorok.hypertube.ponder.scenes.TubeScenes;
 import com.pedrorok.hypertube.registry.ModBlocks;
 import com.pedrorok.hypertube.registry.ModItems;
-import com.tterrag.registrate.util.entry.ItemProviderEntry;
-import com.tterrag.registrate.util.entry.RegistryEntry;
 import com.zurrtum.create.client.ponder.api.registration.PonderSceneRegistrationHelper;
 import net.minecraft.resources.Identifier;
 
@@ -19,7 +19,7 @@ import net.minecraft.resources.Identifier;
 public class HypertubesPonderScenes {
 
     public static void register(PonderSceneRegistrationHelper<Identifier> helper) {
-        PonderSceneRegistrationHelper<ItemProviderEntry<?, ?>> HELPER = helper.withKeyFunction(RegistryEntry::getId);
+        PonderSceneRegistrationHelper<ItemLike> HELPER = helper.withKeyFunction(item -> BuiltInRegistries.ITEM.getKey(item.asItem()));
         HELPER.forComponents(ModBlocks.HYPERTUBE)
                 .addStoryBoard("simple_tube", TubeScenes::simpleTube);
         HELPER.forComponents(ModBlocks.HYPERTUBE_ENTRANCE)

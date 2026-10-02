@@ -1,6 +1,6 @@
 package com.pedrorok.hypertube.core.sound;
 
-import com.pedrorok.hypertube.core.camera.DetachedCameraController;
+import net.minecraft.core.Holder;
 import com.pedrorok.hypertube.registry.ModSounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.protocol.game.ClientboundSoundPacket;
@@ -92,8 +92,8 @@ public class TubeSoundManager {
 
             isClientPlayerInTravel = true;
 
-            float cameraYaw = Math.abs(DetachedCameraController.get().getYaw());
-            float cameraPitch = Math.abs(DetachedCameraController.get().getPitch());
+            float cameraYaw = Math.abs(Minecraft.getInstance().gameRenderer.getMainCamera().yRot());
+            float cameraPitch = Math.abs(Minecraft.getInstance().gameRenderer.getMainCamera().xRot());
 
             float yRot = Math.abs(Minecraft.getInstance().player.getYRot());
             float xRot = Math.abs(Minecraft.getInstance().player.getXRot());
@@ -130,7 +130,7 @@ public class TubeSoundManager {
         float pitch = basePitch + random.nextFloat() * 0.4F;
         int seed = random.nextInt(1000);
         for (Player oPlayer : entity.level().players()) {
-            ((ServerPlayer) oPlayer).connection.send(new ClientboundSoundPacket(ModSounds.HYPERTUBE_SUCTION,
+            ((ServerPlayer) oPlayer).connection.send(new ClientboundSoundPacket(Holder.direct(ModSounds.HYPERTUBE_SUCTION.get()),
                     SoundSource.BLOCKS, pos.x, pos.y, pos.z, baseVolume, pitch, seed));
         }
     }

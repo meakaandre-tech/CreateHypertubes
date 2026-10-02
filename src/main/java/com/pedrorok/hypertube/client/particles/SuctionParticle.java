@@ -1,7 +1,11 @@
 package com.pedrorok.hypertube.client.particles;
 
+import net.minecraft.client.particle.Particle;
+import net.minecraft.client.particle.ParticleProvider;
+import net.minecraft.client.particle.SingleQuadParticle;
+import net.minecraft.client.particle.SpriteSet;
+import net.minecraft.util.RandomSource;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.*;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.world.phys.Vec3;
 
@@ -9,7 +13,7 @@ import net.minecraft.world.phys.Vec3;
  * @author Rok, Pedro Lucas nmm. Created on 01/07/2025
  * @project Create Hypertube
  */
-public class SuctionParticle extends TextureSheetParticle {
+public class SuctionParticle extends SingleQuadParticle {
     private final SpriteSet sprites;
     private final Vec3 initialVelocity;
     private final float ACCELERATION_FACTOR = 5.0f;
@@ -17,7 +21,7 @@ public class SuctionParticle extends TextureSheetParticle {
     public SuctionParticle(ClientLevel level, double x, double y, double z,
                            double vx, double vy, double vz,
                            SpriteSet sprites) {
-        super(level, x, y, z, vx, vy, vz);
+        super(level, x, y, z, vx, vy, vz, sprites.first());
         this.sprites = sprites;
         this.setSpriteFromAge(sprites);
 
@@ -59,8 +63,8 @@ public class SuctionParticle extends TextureSheetParticle {
 
 
     @Override
-    public ParticleRenderType getRenderType() {
-        return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+    protected Layer getLayer() {
+        return Layer.TRANSLUCENT;
     }
 
     public static class Provider implements ParticleProvider<SimpleParticleType> {
@@ -73,7 +77,7 @@ public class SuctionParticle extends TextureSheetParticle {
         @Override
         public Particle createParticle(SimpleParticleType type, ClientLevel level,
                                        double x, double y, double z,
-                                       double vx, double vy, double vz) {
+                                       double vx, double vy, double vz, RandomSource random) {
             return new SuctionParticle(level, x, y, z, vx, vy, vz, sprites);
         }
     }

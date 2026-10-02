@@ -140,7 +140,6 @@ public class HyperEntranceBlockEntity extends ActionTubeBlockEntity implements T
         return true;
     }
 
-    @Override
     public boolean addToTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
         if (getBlockState().getValue(HyperEntranceBlock.LOCKED) && Math.abs(this.getSpeed()) >= TravelConstants.NEEDED_SPEED) {
             tooltip.add(Component.literal("     ").append(Component.translatable("block.hypertube.hyper_entrance.sneak_to_enter")).withColor(0xFFFFFF));

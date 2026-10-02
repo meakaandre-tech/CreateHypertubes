@@ -126,7 +126,7 @@ public class HyperJunctionBlockEntity extends ActionTubeBlockEntity implements T
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null) return false;
         if (mc.player.tickCount % 10 != 0) return false;
-        if (PersistentData.get(mc.player).getBoolean(TravelConstants.TRAVEL_TAG)) return false;
+        if (PersistentData.get(mc.player).getBooleanOr(TravelConstants.TRAVEL_TAG, false)) return false;
 
         List<Direction> connectedFaces = JunctionDirectionUtils.getConnectedFaces(getBlockState(), null, (HyperJunctionBlock) getBlockState().getBlock());
         renderFromDirections(connectedFaces, 0.3f, ModColors.GREEN, 0.72f);

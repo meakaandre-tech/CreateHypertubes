@@ -150,7 +150,7 @@ public class TubeScenes {
         scene.overlay()
                 .showControls(Vec3.atCenterOf(blockR1).add(0, 0.5, 0), Pointing.DOWN, 15)
                 .rightClick()
-                .withItem(AllItems.WRENCH.asStack());
+                .withItem(AllItems.WRENCH.getDefaultInstance());
         scene.idle(10);
         changeSegmentCount(scene, blockL2, "sec-2-l2");
         changeSegmentCount(scene, blockR2, "sec-2-r2");
@@ -163,7 +163,7 @@ public class TubeScenes {
         scene.overlay()
                 .showControls(Vec3.atCenterOf(blockL1).add(0, 0, 0.3), Pointing.LEFT, 15)
                 .rightClick()
-                .withItem(AllItems.WRENCH.asStack());
+                .withItem(AllItems.WRENCH.getDefaultInstance());
         scene.idle(10);
         changeSegmentCount(scene, blockL1, "sec-2-l1");
         scene.idle(70);

@@ -123,7 +123,7 @@ public class EntranceScenes {
         scene.overlay()
                 .showControls(Vec3.atCenterOf(entrancePos).add(0,1,0), Pointing.DOWN, 40)
                 .rightClick()
-                .withItem(AllItems.WRENCH.asStack());
+                .withItem(AllItems.WRENCH.getDefaultInstance());
         changeOpenCloseEntrance(scene, entrancePos, false);
         scene.effects().indicateSuccess(entrancePos);
         scene.idle(50);

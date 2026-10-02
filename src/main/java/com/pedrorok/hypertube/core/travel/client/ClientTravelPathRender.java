@@ -4,7 +4,6 @@ import com.pedrorok.hypertube.core.data.PersistentData;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.pedrorok.hypertube.blocks.HyperJunctionBlock;
 import com.pedrorok.hypertube.blocks.blockentities.HyperJunctionBlockEntity;
-import com.pedrorok.hypertube.core.camera.DetachedCameraController;
 import com.pedrorok.hypertube.core.connection.BezierConnection;
 import com.pedrorok.hypertube.core.connection.interfaces.IConnection;
 import com.pedrorok.hypertube.core.data.JunctionMode;
@@ -133,7 +132,7 @@ public class ClientTravelPathRender {
         float direction = lastValidDirection.toYRot();
 
         float snapSize = 22.5f;
-        float diff = AngleHelper.getShortestAngleDiff(DetachedCameraController.get().getYaw(), direction);
+        float diff = AngleHelper.getShortestAngleDiff(Minecraft.getInstance().gameRenderer.getMainCamera().yRot(), direction);
         if (Math.abs(diff) < 60)
             diff = 0;
 

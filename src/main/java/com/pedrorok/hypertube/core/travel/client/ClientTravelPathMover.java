@@ -1,7 +1,6 @@
 package com.pedrorok.hypertube.core.travel.client;
 
 import com.pedrorok.hypertube.HypertubeMod;
-import com.pedrorok.hypertube.core.camera.DetachedPlayerDirController;
 import com.pedrorok.hypertube.core.connection.interfaces.ITubeActionPoint;
 import com.pedrorok.hypertube.network.packets.ActionPointReachPacket;
 import com.pedrorok.hypertube.network.packets.FinishPathPacket;
@@ -101,7 +100,6 @@ public class ClientTravelPathMover {
             data.updateLogicalPosition();
             entity.setDeltaMovement(data.getCurrentVelocity());
             if (data.isClientPlayer()) {
-                handleEntityDirection(data.getWorldDirection());
                 ClientTravelPathRender.handleClientPlayer(data);
             }
         }
@@ -124,15 +122,8 @@ public class ClientTravelPathMover {
 
             Vec3 renderPos = data.getRenderPosition(partialTicks);
 
-            entity.moveTo(renderPos.x, renderPos.y, renderPos.z);
+            entity.snapTo(renderPos.x, renderPos.y, renderPos.z);
         }
-    }
-
-    private static void handleEntityDirection(Vec3 direction) {
-        float yaw = (float) Math.toDegrees(Math.atan2(-direction.x, direction.z));
-        float pitch = (float) Math.toDegrees(Math.atan2(-direction.y, Math.sqrt(direction.x * direction.x + direction.z * direction.z)));
-        DetachedPlayerDirController.get().setDetached(true);
-        DetachedPlayerDirController.get().updateRotation(yaw, pitch);
     }
 
     public static void updateSegment(int entityId, int segment) {

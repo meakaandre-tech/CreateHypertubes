@@ -25,7 +25,7 @@ public class HypertubesPonderPlugin implements PonderPlugin {
     }
 
     public static boolean isAnyPonderScreenOpen() {
-        return Minecraft.getInstance().screen instanceof PonderUI;
+        return Minecraft.getInstance().gui.screen() instanceof PonderUI;
     }
 
     @Override

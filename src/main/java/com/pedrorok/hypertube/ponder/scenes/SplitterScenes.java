@@ -96,7 +96,7 @@ public class SplitterScenes {
         scene.overlay()
                 .showControls(Vec3.atCenterOf(splitterPos).add(0, 1.1, -1), Pointing.RIGHT, 30)
                 .rightClick()
-                .withItem(AllItems.WRENCH.asStack());
+                .withItem(AllItems.WRENCH.getDefaultInstance());
         scene.idle(10);
         setMode(scene, splitterPos, JunctionMode.FORCED_CONTINUE);
         scene.effects().indicateSuccess(splitterPos);
@@ -118,7 +118,7 @@ public class SplitterScenes {
         scene.overlay()
                 .showControls(Vec3.atCenterOf(splitterPos).add(0, 1.1, -1), Pointing.RIGHT, 30)
                 .rightClick()
-                .withItem(AllItems.WRENCH.asStack());
+                .withItem(AllItems.WRENCH.getDefaultInstance());
         scene.idle(10);
         setMode(scene, splitterPos, JunctionMode.FORCED_CENTER);
         scene.effects().indicateSuccess(splitterPos);
@@ -175,7 +175,7 @@ public class SplitterScenes {
 
     private static void showPulse(CreateSceneBuilder scene, BlockPos splitterPos, Direction exitFace, int color, int durationTicks) {
         scene.addInstruction(ponderScene -> {
-            PonderLevel level = ponderScene.getWorld();
+            PonderLevel level = ponderScene.getLevel();
             if (!(level.getBlockEntity(splitterPos) instanceof HyperJunctionBlockEntity splitter)) return;
 
             IConnection connection = splitter.getConnectionInDirection(exitFace);

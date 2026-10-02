@@ -86,7 +86,7 @@ public class AcceleratorScenes {
         scene.overlay()
                 .showControls(Vec3.atCenterOf(entrancePos).add(0,1,0), Pointing.DOWN, 40)
                 .rightClick()
-                .withItem(AllItems.WRENCH.asStack());
+                .withItem(AllItems.WRENCH.getDefaultInstance());
         changeAccelerateMode(scene, entrancePos, false);
         scene.effects().indicateSuccess(entrancePos);
         scene.idle(80);

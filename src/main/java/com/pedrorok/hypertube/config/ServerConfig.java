@@ -145,7 +145,7 @@ public class ServerConfig {
     }
 
     public static boolean canEntityTravel(EntityType<?> type) {
-        boolean isInTag = type.is(TravelConstants.TRAVELLER_ENTITIES);
+        boolean isInTag = type.builtInRegistryHolder().is(TravelConstants.TRAVELLER_ENTITIES);
         return get().canEntityTravel(type, isInTag);
     }
 
