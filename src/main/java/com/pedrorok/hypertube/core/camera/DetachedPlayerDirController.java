@@ -6,15 +6,12 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 
 /**
  * @author Rok, Pedro Lucas nmm. Created on 27/06/2025
  * @project Create Hypertube
  */
 @Getter
-@OnlyIn(Dist.CLIENT)
 public class DetachedPlayerDirController {
 
     private static DetachedPlayerDirController INSTANCE;

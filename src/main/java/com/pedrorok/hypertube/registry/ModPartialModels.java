@@ -1,8 +1,8 @@
 package com.pedrorok.hypertube.registry;
 
 import com.pedrorok.hypertube.HypertubeMod;
-import dev.engine_room.flywheel.lib.model.baked.PartialModel;
-import net.minecraft.resources.ResourceLocation;
+import com.zurrtum.create.client.flywheel.lib.model.baked.PartialModel;
+import net.minecraft.resources.Identifier;
 
 /**
  * @author Rok, Pedro Lucas nmm. Created on 03/06/2025

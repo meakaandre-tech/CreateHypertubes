@@ -1,12 +1,12 @@
 package com.pedrorok.hypertube.ponder;
 
 import com.pedrorok.hypertube.HypertubeMod;
-import net.createmod.ponder.api.registration.PonderPlugin;
-import net.createmod.ponder.api.registration.PonderSceneRegistrationHelper;
-import net.createmod.ponder.api.registration.PonderTagRegistrationHelper;
-import net.createmod.ponder.foundation.ui.PonderUI;
+import com.zurrtum.create.client.ponder.api.registration.PonderPlugin;
+import com.zurrtum.create.client.ponder.api.registration.PonderSceneRegistrationHelper;
+import com.zurrtum.create.client.ponder.api.registration.PonderTagRegistrationHelper;
+import com.zurrtum.create.client.ponder.foundation.ui.PonderUI;
 import net.minecraft.client.Minecraft;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -20,7 +20,7 @@ public class HypertubesPonderPlugin implements PonderPlugin {
     }
 
     @Override
-    public void registerScenes(@NotNull PonderSceneRegistrationHelper<ResourceLocation> helper) {
+    public void registerScenes(@NotNull PonderSceneRegistrationHelper<Identifier> helper) {
         HypertubesPonderScenes.register(helper);
     }
 
@@ -29,7 +29,7 @@ public class HypertubesPonderPlugin implements PonderPlugin {
     }
 
     @Override
-    public void registerTags(@NotNull PonderTagRegistrationHelper<ResourceLocation> helper) {
+    public void registerTags(@NotNull PonderTagRegistrationHelper<Identifier> helper) {
         HypertubesPonderTags.register(helper);
     }
 }

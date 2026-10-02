@@ -2,7 +2,7 @@ package com.pedrorok.hypertube.registry;
 
 import com.pedrorok.hypertube.HypertubeMod;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.neoforged.bus.api.IEventBus;

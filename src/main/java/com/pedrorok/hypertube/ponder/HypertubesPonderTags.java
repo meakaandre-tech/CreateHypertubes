@@ -4,9 +4,9 @@ import com.pedrorok.hypertube.HypertubeMod;
 import com.pedrorok.hypertube.registry.ModBlocks;
 import com.pedrorok.hypertube.registry.ModItems;
 import com.tterrag.registrate.util.entry.RegistryEntry;
-import net.createmod.catnip.registry.RegisteredObjectsHelper;
-import net.createmod.ponder.api.registration.PonderTagRegistrationHelper;
-import net.minecraft.resources.ResourceLocation;
+import com.zurrtum.create.catnip.registry.RegisteredObjectsHelper;
+import com.zurrtum.create.client.ponder.api.registration.PonderTagRegistrationHelper;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.ItemLike;
 
 /**
@@ -15,15 +15,15 @@ import net.minecraft.world.level.ItemLike;
  */
 public class HypertubesPonderTags {
 
-    public static final ResourceLocation
+    public static final Identifier
 
             HYPERTUBE_SYSTEMS = loc("hypertube_systems");
 
-    private static ResourceLocation loc(String id) {
+    private static Identifier loc(String id) {
         return HypertubeMod.of(id);
     }
 
-    public static void register(PonderTagRegistrationHelper<ResourceLocation> helper) {
+    public static void register(PonderTagRegistrationHelper<Identifier> helper) {
 
         PonderTagRegistrationHelper<RegistryEntry<?, ?>> HELPER = helper.withKeyFunction(RegistryEntry::getId);
 

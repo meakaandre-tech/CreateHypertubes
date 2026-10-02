@@ -12,8 +12,8 @@ import com.pedrorok.hypertube.core.sound.TubeSoundManager;
 import com.pedrorok.hypertube.core.travel.TravelConstants;
 import com.pedrorok.hypertube.core.travel.TravelManager;
 import com.pedrorok.hypertube.utils.TubeUtils;
-import com.simibubi.create.api.equipment.goggles.IHaveHoveringInformation;
-import com.simibubi.create.content.kinetics.base.IRotate;
+import com.zurrtum.create.client.api.goggles.IHaveHoveringInformation;
+import com.zurrtum.create.content.kinetics.base.IRotate;
 import lombok.Getter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -26,8 +26,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -112,8 +110,6 @@ public class HyperEntranceBlockEntity extends ActionTubeBlockEntity implements I
         if (!hasStartedTravel) return;
         TubeSoundManager.playTubeSuctionSound(inRangeEntity, getBlockPos().getCenter());
     }
-
-    @OnlyIn(Dist.CLIENT)
     private void tickClient(boolean isBlocked) {
         float actualSpeed = Math.abs(this.getSpeed());
         TubeSoundManager.TubeAmbientSound sound = TubeSoundManager.getAmbientSound(tubeSoundId);

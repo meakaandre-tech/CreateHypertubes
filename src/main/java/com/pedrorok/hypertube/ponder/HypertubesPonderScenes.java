@@ -9,8 +9,8 @@ import com.pedrorok.hypertube.registry.ModBlocks;
 import com.pedrorok.hypertube.registry.ModItems;
 import com.tterrag.registrate.util.entry.ItemProviderEntry;
 import com.tterrag.registrate.util.entry.RegistryEntry;
-import net.createmod.ponder.api.registration.PonderSceneRegistrationHelper;
-import net.minecraft.resources.ResourceLocation;
+import com.zurrtum.create.client.ponder.api.registration.PonderSceneRegistrationHelper;
+import net.minecraft.resources.Identifier;
 
 /**
  * @author Rok, Pedro Lucas nmm. 27/01/2026
@@ -18,7 +18,7 @@ import net.minecraft.resources.ResourceLocation;
  */
 public class HypertubesPonderScenes {
 
-    public static void register(PonderSceneRegistrationHelper<ResourceLocation> helper) {
+    public static void register(PonderSceneRegistrationHelper<Identifier> helper) {
         PonderSceneRegistrationHelper<ItemProviderEntry<?, ?>> HELPER = helper.withKeyFunction(RegistryEntry::getId);
         HELPER.forComponents(ModBlocks.HYPERTUBE)
                 .addStoryBoard("simple_tube", TubeScenes::simpleTube);

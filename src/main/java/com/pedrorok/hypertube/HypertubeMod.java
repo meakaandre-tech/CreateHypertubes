@@ -6,7 +6,7 @@ import com.pedrorok.hypertube.core.smarttube.ITubeAttachment;
 import com.pedrorok.hypertube.registry.*;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.CreativeModeTab;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
@@ -61,7 +61,7 @@ public class HypertubeMod {
         return REGISTRATE;
     }
 
-    public static ResourceLocation of(String resourceId) {
-        return ResourceLocation.fromNamespaceAndPath(MOD_ID, resourceId);
+    public static Identifier of(String resourceId) {
+        return Identifier.fromNamespaceAndPath(MOD_ID, resourceId);
     }
 }

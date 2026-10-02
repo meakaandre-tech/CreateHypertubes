@@ -9,14 +9,11 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 
 /**
  * @author Rok, Pedro Lucas nmm. Created on 22/04/2025
  * @project Create Hypertube
  */
-@OnlyIn(Dist.CLIENT)
 public class DetachedCameraController {
 
     private static DetachedCameraController INSTANCE;

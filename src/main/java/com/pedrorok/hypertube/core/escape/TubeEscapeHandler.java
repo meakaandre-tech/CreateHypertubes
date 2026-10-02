@@ -5,7 +5,7 @@ import com.pedrorok.hypertube.core.travel.TravelConstants;
 import com.pedrorok.hypertube.core.travel.client.ClientTravelPathMover;
 import com.pedrorok.hypertube.network.packets.EscapeTubePacket;
 import com.pedrorok.hypertube.registry.ModKeybinds;
-import net.createmod.catnip.animation.LerpedFloat;
+import com.zurrtum.create.catnip.animation.LerpedFloat;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;

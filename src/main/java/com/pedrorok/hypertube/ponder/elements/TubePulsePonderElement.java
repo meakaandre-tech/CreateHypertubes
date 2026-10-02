@@ -4,10 +4,10 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.pedrorok.hypertube.core.connection.BezierConnection;
 import com.pedrorok.hypertube.utils.TubePulseEffect;
 import com.pedrorok.hypertube.utils.TubePulseRenderer;
-import net.createmod.ponder.api.element.PonderSceneElement;
-import net.createmod.ponder.api.level.PonderLevel;
-import net.createmod.ponder.foundation.PonderScene;
-import net.createmod.ponder.foundation.element.PonderElementBase;
+import com.zurrtum.create.client.ponder.api.element.PonderSceneElement;
+import com.zurrtum.create.client.ponder.api.level.PonderLevel;
+import com.zurrtum.create.client.ponder.foundation.PonderScene;
+import com.zurrtum.create.client.ponder.foundation.element.PonderElementBase;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.gui.GuiGraphics;
@@ -16,8 +16,6 @@ import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -28,7 +26,6 @@ import java.util.OptionalDouble;
  * @author Rok, Pedro Lucas nmm. 29/07/2026
  * @project Create Hypertube
  */
-@OnlyIn(Dist.CLIENT)
 public class TubePulsePonderElement extends PonderElementBase implements PonderSceneElement {
 
     private static final RenderType LINES = RenderType.create("create_hypertube_ponder_lines",

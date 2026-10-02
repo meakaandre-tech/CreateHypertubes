@@ -2,11 +2,9 @@ package com.pedrorok.hypertube.core.travel;
 
 import com.pedrorok.hypertube.HypertubeMod;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -35,8 +33,6 @@ public class TravelConstants {
 
     public static final TagKey<EntityType<?>> TRAVELLER_ENTITIES =
             TagKey.create(Registries.ENTITY_TYPE, HypertubeMod.of("traveller_entities"));
-
-    @OnlyIn(Dist.CLIENT)
     public static class Client {
         public static final Map<EntityType<?>, TravellerEntity> ENTITIES_RENDER = new HashMap<>() {{
             put(EntityType.PLAYER, TravellerEntity.ofBiped(-0.5f));

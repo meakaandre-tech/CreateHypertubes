@@ -14,7 +14,7 @@ import com.pedrorok.hypertube.core.data.MoveDirection;
 import com.pedrorok.hypertube.utils.ModColors;
 import com.pedrorok.hypertube.utils.RenderUtils;
 import com.pedrorok.hypertube.utils.TubePulseRenderer;
-import net.createmod.catnip.math.AngleHelper;
+import com.zurrtum.create.catnip.math.AngleHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;

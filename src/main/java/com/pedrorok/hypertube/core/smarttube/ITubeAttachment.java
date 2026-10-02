@@ -2,7 +2,7 @@ package com.pedrorok.hypertube.core.smarttube;
 
 import com.pedrorok.hypertube.blocks.blockentities.parent.ActionTubeBlockEntity;
 import com.pedrorok.hypertube.core.connection.interfaces.ITubeActionPoint;
-import dev.engine_room.flywheel.lib.model.baked.PartialModel;
+import com.zurrtum.create.client.flywheel.lib.model.baked.PartialModel;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;

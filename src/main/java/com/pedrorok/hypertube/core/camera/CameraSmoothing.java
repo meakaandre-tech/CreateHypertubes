@@ -2,14 +2,11 @@ package com.pedrorok.hypertube.core.camera;
 
 import net.minecraft.SharedConstants;
 import net.minecraft.util.Mth;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 
 /**
  * @author Rok, Pedro Lucas nmm. Created on 29/07/2026
  * @project Create Hypertube
  */
-@OnlyIn(Dist.CLIENT)
 public class CameraSmoothing {
 
     public static final float REFERENCE_RATE = 60f;

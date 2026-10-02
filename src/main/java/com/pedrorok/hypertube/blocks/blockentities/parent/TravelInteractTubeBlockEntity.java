@@ -19,8 +19,6 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
@@ -74,9 +72,6 @@ public abstract class TravelInteractTubeBlockEntity extends TubeBlockEntity {
         float pitch = 0.4F + random.nextFloat() * 0.4F;
         level.playSound(null, this.getBlockPos(), open ? ModSounds.HYPERTUBE_ENTRANCE_OPEN.get() : ModSounds.HYPERTUBE_ENTRANCE_CLOSE.get(), SoundSource.BLOCKS, 0.2f, pitch);
     }
-
-
-    @OnlyIn(Dist.CLIENT)
     protected void playClientEffects(TubeSoundManager.TubeAmbientSound sound) {
         BlockState state = this.getBlockState();
         BlockPos pos = this.getBlockPos();
@@ -164,8 +159,6 @@ public abstract class TravelInteractTubeBlockEntity extends TubeBlockEntity {
         }
         super.remove();
     }
-
-    @OnlyIn(Dist.CLIENT)
     private void removeClient() {
         TubeSoundManager.getAmbientSound(tubeSoundId).stopSound();
         TubeSoundManager.removeAmbientSound(tubeSoundId);

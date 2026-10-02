@@ -2,7 +2,7 @@ package com.pedrorok.hypertube.mixin.core;
 
 import com.pedrorok.hypertube.core.travel.TravelConstants;
 import com.pedrorok.hypertube.utils.VoxelUtils;
-import com.simibubi.create.content.kinetics.base.KineticBlock;
+import com.zurrtum.create.content.kinetics.base.KineticBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockBehaviour;

@@ -7,10 +7,10 @@ import com.pedrorok.hypertube.core.placement.ResponseDTO;
 import com.pedrorok.hypertube.utils.CodecUtils;
 import io.netty.buffer.ByteBuf;
 import lombok.Getter;
-import net.createmod.catnip.animation.LerpedFloat;
-import net.createmod.catnip.data.Pair;
-import net.createmod.catnip.outliner.Outliner;
-import net.createmod.catnip.theme.Color;
+import com.zurrtum.create.catnip.animation.LerpedFloat;
+import com.zurrtum.create.catnip.data.Pair;
+import com.zurrtum.create.client.catnip.outliner.Outliner;
+import com.zurrtum.create.catnip.theme.Color;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.codec.StreamCodec;
@@ -18,8 +18,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -281,9 +279,6 @@ public class BezierConnection implements IConnection {
     public static BezierConnection of(SimpleConnection from, @Nullable SimpleConnection toPos) {
         return new BezierConnection(from, toPos);
     }
-
-
-    @OnlyIn(Dist.CLIENT)
     public void drawPath(LerpedFloat animation, boolean isValid) {
         if (distance() > MAX_REASONABLE_DISTANCE) return;
 
@@ -299,8 +294,6 @@ public class BezierConnection implements IConnection {
             id++;
         }
     }
-
-    @OnlyIn(Dist.CLIENT)
     public static void line(UUID uuid, int id, Vec3 start, Vec3 end, LerpedFloat animation, boolean hasException) {
         int color = Color.mixColors(0xEA5C2B, 0x95CD41, animation.getValue());
         if (hasException) {
@@ -313,8 +306,6 @@ public class BezierConnection implements IConnection {
                 .disableLineNormals()
                 .colored(color);
     }
-
-    @OnlyIn(Dist.CLIENT)
     public static void outlineBlocks(BlockPos pos) {
         Outliner.getInstance().showAABB(pos.asLong(), new AABB(pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1,
                         pos.getX(), pos.getY(), pos.getZ()))

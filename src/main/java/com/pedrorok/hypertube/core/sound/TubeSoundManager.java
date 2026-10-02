@@ -11,8 +11,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,18 +23,12 @@ import java.util.UUID;
 public class TubeSoundManager {
 
     private static final Map<UUID, TubeAmbientSound> ambientSounds = new HashMap<>();
-
-    @OnlyIn(Dist.CLIENT)
     public static void tickClientPlayerSounds() {
         TravelSound.tickClientPlayerSounds();
     }
-
-    @OnlyIn(Dist.CLIENT)
     public static TubeAmbientSound getAmbientSound(UUID uuid) {
         return ambientSounds.computeIfAbsent(uuid, k -> new TubeAmbientSound());
     }
-
-    @OnlyIn(Dist.CLIENT)
     public static void removeAmbientSound(UUID uuid) {
         TubeAmbientSound sound = ambientSounds.remove(uuid);
         if (sound != null) {
@@ -48,8 +40,6 @@ public class TubeSoundManager {
         private boolean isClientNear;
 
         private TubeSound travelSound;
-
-        @OnlyIn(Dist.CLIENT)
         public void enableClientPlayerSound(Entity e, Vec3 normal, double distance, boolean isOpen) {
             if (e != Minecraft.getInstance()
                     .getCameraEntity())
@@ -75,8 +65,6 @@ public class TubeSoundManager {
             travelSound.setPitch(pitch);
             travelSound.fadeIn(maxVolume);
         }
-
-        @OnlyIn(Dist.CLIENT)
         public void tickClientPlayerSounds() {
             if (!isClientNear && travelSound != null)
                 if (travelSound.isFaded())
@@ -85,8 +73,6 @@ public class TubeSoundManager {
                     travelSound.fadeOut();
             isClientNear = false;
         }
-
-        @OnlyIn(Dist.CLIENT)
         public void stopSound() {
             if (travelSound != null) {
                 travelSound.stopSound();
@@ -99,8 +85,6 @@ public class TubeSoundManager {
         private static boolean isClientPlayerInTravel;
 
         private static TubeSound travelSound;
-
-        @OnlyIn(Dist.CLIENT)
         public static void enableClientPlayerSound(Entity e, float maxVolume, float pitch) {
             if (e != Minecraft.getInstance()
                     .getCameraEntity())
@@ -127,8 +111,6 @@ public class TubeSoundManager {
             travelSound.setPitch(isCameraInside ? pitch : 1.5f);
             travelSound.fadeIn(maxVolume * (isCameraInside ? 1.5f : 0.8f));
         }
-
-        @OnlyIn(Dist.CLIENT)
         private static void tickClientPlayerSounds() {
             if (!isClientPlayerInTravel && travelSound != null)
                 if (travelSound.isFaded())

@@ -15,7 +15,7 @@ import com.pedrorok.hypertube.core.travel.TravelConstants;
 import com.pedrorok.hypertube.utils.JunctionDirectionUtils;
 import com.pedrorok.hypertube.utils.ModColors;
 import com.pedrorok.hypertube.utils.TubePulseRenderer;
-import com.simibubi.create.api.equipment.goggles.IHaveHoveringInformation;
+import com.zurrtum.create.client.api.goggles.IHaveHoveringInformation;
 import lombok.Getter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -29,8 +29,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -107,9 +105,6 @@ public class HyperJunctionBlockEntity extends ActionTubeBlockEntity implements I
 
         isTubeClosed(canOpen, isOpen);
     }
-
-
-    @OnlyIn(Dist.CLIENT)
     private void tickClient() {
         float actualSpeed = Math.abs(this.getSpeed());
         TubeSoundManager.TubeAmbientSound sound = TubeSoundManager.getAmbientSound(tubeSoundId);
@@ -121,7 +116,6 @@ public class HyperJunctionBlockEntity extends ActionTubeBlockEntity implements I
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null) return false;
@@ -146,8 +140,6 @@ public class HyperJunctionBlockEntity extends ActionTubeBlockEntity implements I
 
         return false;
     }
-
-    @OnlyIn(Dist.CLIENT)
     private void renderFromDirections(List<Direction> directions, float speed, int color, float radius) {
         Minecraft mc = Minecraft.getInstance();
         for (Direction direction : directions) {

@@ -7,7 +7,7 @@ import com.pedrorok.hypertube.core.placement.ResponseDTO;
 import com.pedrorok.hypertube.core.placement.TubePlacement;
 import com.pedrorok.hypertube.registry.ModDataComponent;
 import com.pedrorok.hypertube.utils.MessageUtils;
-import com.simibubi.create.AllDataComponents;
+import com.zurrtum.create.AllDataComponents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;

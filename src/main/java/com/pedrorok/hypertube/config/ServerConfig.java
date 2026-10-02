@@ -3,7 +3,7 @@ package com.pedrorok.hypertube.config;
 import com.pedrorok.hypertube.core.travel.TravelConstants;
 import com.pedrorok.hypertube.utils.TubeUtils;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.neoforged.neoforge.common.ModConfigSpec;
@@ -127,7 +127,7 @@ public class ServerConfig {
         targetSet.clear();
         for (String entityId : entityIds) {
             try {
-                ResourceLocation location = ResourceLocation.parse(entityId);
+                Identifier location = Identifier.parse(entityId);
                 EntityType<?> entityType = BuiltInRegistries.ENTITY_TYPE.get(location);
 
                 if (entityType != null) {

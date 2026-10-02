@@ -11,8 +11,8 @@ import com.pedrorok.hypertube.core.connection.TubeConnectionException;
 import com.pedrorok.hypertube.core.connection.interfaces.IConnection;
 import com.pedrorok.hypertube.core.sound.TubeSoundManager;
 import com.pedrorok.hypertube.core.travel.TravelConstants;
-import com.simibubi.create.api.equipment.goggles.IHaveHoveringInformation;
-import com.simibubi.create.content.kinetics.base.IRotate;
+import com.zurrtum.create.client.api.goggles.IHaveHoveringInformation;
+import com.zurrtum.create.content.kinetics.base.IRotate;
 import lombok.Getter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -25,8 +25,6 @@ import net.minecraft.util.Tuple;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -95,9 +93,6 @@ public class HyperAcceleratorBlockEntity extends ActionTubeBlockEntity implement
 
         isTubeClosed(canOpen, isOpen);
     }
-
-
-    @OnlyIn(Dist.CLIENT)
     private void tickClient() {
         float actualSpeed = Math.abs(this.getSpeed());
         TubeSoundManager.TubeAmbientSound sound = TubeSoundManager.getAmbientSound(tubeSoundId);

@@ -15,7 +15,7 @@ import com.pedrorok.hypertube.utils.MessageUtils;
 import com.pedrorok.hypertube.utils.RayCastUtils;
 import com.pedrorok.hypertube.utils.TubeUtils;
 import com.pedrorok.hypertube.utils.VoxelUtils;
-import com.simibubi.create.content.equipment.wrench.IWrenchable;
+import com.zurrtum.create.content.equipment.wrench.IWrenchable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;

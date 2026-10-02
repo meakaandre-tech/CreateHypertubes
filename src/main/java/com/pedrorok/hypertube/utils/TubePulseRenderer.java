@@ -13,8 +13,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
@@ -26,7 +24,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * @author Rok, Pedro Lucas nmm. 17/06/2026
  * @project Create Hypertube
  */
-@OnlyIn(Dist.CLIENT)
 public final class TubePulseRenderer {
 
     private static final List<TubePulseEffect> ACTIVE_EFFECTS = new CopyOnWriteArrayList<>();
