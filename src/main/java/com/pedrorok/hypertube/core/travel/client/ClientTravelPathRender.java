@@ -133,7 +133,7 @@ public class ClientTravelPathRender {
         float direction = lastValidDirection.toYRot();
 
         float snapSize = 22.5f;
-        float diff = AngleHelper.getShortestAngleDiff(Minecraft.getInstance().gameRenderer.getMainCamera().yRot(), direction);
+        float diff = AngleHelper.getShortestAngleDiff(Minecraft.getInstance().gameRenderer.mainCamera().yRot(), direction);
         if (Math.abs(diff) < 60)
             diff = 0;
 

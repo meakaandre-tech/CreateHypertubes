@@ -92,8 +92,8 @@ public class TubeSoundManager {
 
             isClientPlayerInTravel = true;
 
-            float cameraYaw = Math.abs(Minecraft.getInstance().gameRenderer.getMainCamera().yRot());
-            float cameraPitch = Math.abs(Minecraft.getInstance().gameRenderer.getMainCamera().xRot());
+            float cameraYaw = Math.abs(Minecraft.getInstance().gameRenderer.mainCamera().yRot());
+            float cameraPitch = Math.abs(Minecraft.getInstance().gameRenderer.mainCamera().xRot());
 
             float yRot = Math.abs(Minecraft.getInstance().player.getYRot());
             float xRot = Math.abs(Minecraft.getInstance().player.getXRot());

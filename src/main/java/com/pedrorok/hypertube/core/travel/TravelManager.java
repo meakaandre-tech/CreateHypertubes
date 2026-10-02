@@ -157,7 +157,7 @@ public class TravelManager {
         if (data.isJunctionEnd() && !data.isForced()) {
             BlockEntity blockState = level.getBlockEntity(pathMover.getLastPos());
             if (!tryStartTravel(entity, blockState, data.direction(), pathMover.getTravelSpeed())) return;
-            TubeSoundManager.playTubeSuctionSound(entity, pathMover.getLastPos().getCenter(), 0.5f, 1.2f);
+            TubeSoundManager.playTubeSuctionSound(entity, Vec3.atCenterOf(pathMover.getLastPos()), 0.5f, 1.2f);
             return;
         }
 
@@ -165,7 +165,7 @@ public class TravelManager {
         Vec3 lastBlockPos = Vec3.atCenterOf(pathMover.getLastPos());
         BlockState blockState = level.getBlockState(BlockPos.containing(lastBlockPos));
         if (blockState.getBlock() instanceof HyperEntranceBlock) {
-            lastBlockPos = pathMover.getLastPos().relative(blockState.getValue(HyperEntranceBlock.FACING).getOpposite()).getCenter();
+            lastBlockPos = Vec3.atCenterOf(pathMover.getLastPos().relative(blockState.getValue(HyperEntranceBlock.FACING).getOpposite()));
         }
 
 
