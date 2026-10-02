@@ -1,0 +1,16 @@
+gamerule minecraft:spawn_mobs false
+forceload add -16 -16 31 15
+fill -4 199 -4 24 199 8 minecraft:stone
+setblock 0 200 0 create_hypertube:hypertube_entrance[facing=east,locked=false]
+setblock 6 200 0 create_hypertube:hypertube_entrance[facing=west,locked=false]
+setblock 0 200 1 create:cogwheel[axis=x]
+setblock -1 200 1 create:creative_motor[facing=east]{ScrollValue:64}
+setblock 10 200 0 create_hypertube:hypertube_accelerator
+setblock 12 200 0 create_hypertube:hypertube_junction
+setblock 14 200 0 create_hypertube:hypertube
+tick sprint 100
+say CHECK blocks placed
+data get block 0 200 0
+data get block 10 200 0
+data get block 12 200 0
+data get block 14 200 0
