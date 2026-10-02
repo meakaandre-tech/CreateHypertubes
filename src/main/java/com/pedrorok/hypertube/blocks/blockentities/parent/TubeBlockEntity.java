@@ -28,7 +28,7 @@ public abstract class TubeBlockEntity extends KineticBlockEntity implements ITub
     protected abstract int getConnectionCount();
 
     public void sync() {
-        if (level != null && !level.isClientSide) {
+        if (level != null && !level.isClientSide()) {
             level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
         }
     }
@@ -118,6 +118,6 @@ public abstract class TubeBlockEntity extends KineticBlockEntity implements ITub
         IConnection first = connections.get(0);
         SimpleConnection sameConnectionBlockPos = IConnection.getSameConnectionBlockPos(first, level, getBlockPos());
         if (sameConnectionBlockPos == null) return null;
-        return Vec3.atLowerCornerOf(sameConnectionBlockPos.direction().getOpposite().getNormal());
+        return Vec3.atLowerCornerOf(sameConnectionBlockPos.direction().getOpposite().getUnitVec3i());
     }
 }

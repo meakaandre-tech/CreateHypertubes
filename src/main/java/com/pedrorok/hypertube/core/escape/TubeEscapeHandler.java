@@ -38,7 +38,7 @@ public class TubeEscapeHandler {
         }
         float value = holdKeyProgress.getValue();
 
-        if (!PersistentData.get(player).getBoolean(TravelConstants.TRAVEL_TAG)) {
+        if (!PersistentData.get(player).getBooleanOr(TravelConstants.TRAVEL_TAG, false)) {
             if (value < 0) return;
             holdKeyProgress.setValue(Math.max(0, value - .05f));
             return;

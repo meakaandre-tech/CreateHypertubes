@@ -126,7 +126,7 @@ public class TubeSoundManager {
     }
 
     public static void playTubeSuctionSound(LivingEntity entity, Vec3 pos, float baseVolume, float basePitch) {
-        RandomSource random = entity.level().random;
+        RandomSource random = entity.level().getRandom();
         float pitch = basePitch + random.nextFloat() * 0.4F;
         int seed = random.nextInt(1000);
         for (Player oPlayer : entity.level().players()) {

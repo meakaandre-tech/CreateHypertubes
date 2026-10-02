@@ -40,7 +40,7 @@ public class TubePathBlockEntity extends BlockEntity {
         this.owner = owner;
         this.shape = normalize(boxes);
         setChanged();
-        if (level != null && !level.isClientSide) {
+        if (level != null && !level.isClientSide()) {
             level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
         }
     }

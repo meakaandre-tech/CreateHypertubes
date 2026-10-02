@@ -66,7 +66,7 @@ public record SyncPersistentDataPacket(int entityId, CompoundTag readData) imple
             CompoundTag data = PersistentData.get(entityByID);
             new HashSet<>(data.getAllKeys()).forEach(data::remove);
             data.merge(packet.readData);
-            if (!data.getBoolean(TravelConstants.TRAVEL_TAG)) {
+            if (!data.getBooleanOr(TravelConstants.TRAVEL_TAG, false)) {
                 ClientTravelPathMover.stopMoving(packet.entityId);
             }
             if (!(entityByID instanceof ISyncPersistentData))

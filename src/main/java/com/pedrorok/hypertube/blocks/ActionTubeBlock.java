@@ -28,7 +28,7 @@ import java.util.List;
  */
 public abstract class ActionTubeBlock extends TubeBlock {
 
-    public static final DirectionProperty FACING = BlockStateProperties.FACING;
+    public static final EnumProperty<Direction> FACING = BlockStateProperties.FACING;
     public static final IntegerProperty POWER = BlockStateProperties.POWER;
     public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
 

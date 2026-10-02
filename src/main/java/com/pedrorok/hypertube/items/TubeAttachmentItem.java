@@ -36,7 +36,7 @@ public class TubeAttachmentItem extends Item {
         Level level = pContext.getLevel();
         BlockState state = level.getBlockState(pos);
         Player player = pContext.getPlayer();
-        if (level.isClientSide) return InteractionResult.SUCCESS;
+        if (level.isClientSide()) return InteractionResult.SUCCESS;
 
         if (player == null)
             return super.useOn(pContext);

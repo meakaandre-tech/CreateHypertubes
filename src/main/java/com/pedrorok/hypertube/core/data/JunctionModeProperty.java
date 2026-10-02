@@ -1,7 +1,8 @@
 package com.pedrorok.hypertube.core.data;
 
 import com.pedrorok.hypertube.blocks.HyperJunctionBlock;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 
 import java.util.Collection;

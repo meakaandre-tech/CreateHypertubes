@@ -35,7 +35,7 @@ public record SimpleConnection(BlockPos pos, Direction direction, float offset) 
     );
 
     public Vec3 getOffsetCenter() {
-        Vec3 center = pos.getCenter();
+        Vec3 center = Vec3.atCenterOf(pos);
         if (offset == 0f) return center;
         return center.add(
                 direction.getStepX() * offset,

@@ -18,7 +18,7 @@ public class LocalPlayerMixin {
     @Inject(method = "isShiftKeyDown", at = @At("HEAD"), cancellable = true)
     private void createHypertube$cancelShiftKeyDown(CallbackInfoReturnable<Boolean> cir) {
         LocalPlayer player = (LocalPlayer) (Object) this;
-        if (!PersistentData.get(player).getBoolean(TravelConstants.TRAVEL_TAG)) return;
+        if (!PersistentData.get(player).getBooleanOr(TravelConstants.TRAVEL_TAG, false)) return;
         cir.setReturnValue(false);
     }
 }

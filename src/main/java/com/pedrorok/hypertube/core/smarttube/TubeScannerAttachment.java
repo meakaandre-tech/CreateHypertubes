@@ -41,7 +41,7 @@ public class TubeScannerAttachment implements ITubeAttachment {
         return ((entity, mover, pos) -> {
             var level = entity.level();
 
-            if (level.isClientSide) return;
+            if (level.isClientSide()) return;
 
             BlockState currentState = level.getBlockState(pos);
 

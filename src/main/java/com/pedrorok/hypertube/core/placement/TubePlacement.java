@@ -171,7 +171,7 @@ public class TubePlacement {
         }
         TubeUtils.checkSurvivalItems(player, (int) connection.distance(), false);
 
-        if (level.isClientSide) {
+        if (level.isClientSide()) {
             connection.drawPath(LerpedFloat.linear()
                     .startWithValue(0), true);
         }

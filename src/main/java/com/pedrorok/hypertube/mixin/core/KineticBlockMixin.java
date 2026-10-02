@@ -28,7 +28,7 @@ public abstract class KineticBlockMixin {
         if (state.getBlock() instanceof KineticBlock
                 && context instanceof EntityCollisionContext ecc
                 && ecc.getEntity() != null
-                && PersistentData.get(ecc.getEntity()).getBoolean(TravelConstants.TRAVEL_TAG)) {
+                && PersistentData.get(ecc.getEntity()).getBooleanOr(TravelConstants.TRAVEL_TAG, false)) {
             cir.setReturnValue(VoxelUtils.empty());
         }
     }

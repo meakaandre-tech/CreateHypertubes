@@ -29,7 +29,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
@@ -49,7 +50,7 @@ import java.util.List;
  */
 public class HyperJunctionBlock extends ActionTubeBlock implements EntityBlock {
 
-    public static final DirectionProperty FACING = BlockStateProperties.FACING;
+    public static final EnumProperty<Direction> FACING = BlockStateProperties.FACING;
     public static final BooleanProperty OPEN = BlockStateProperties.OPEN;
     public static final BooleanProperty ACTIVE = BooleanProperty.create("active");
     public static final JunctionModeProperty JUNCTION_MODE = JunctionModeProperty.create("junction_mode");
@@ -142,7 +143,7 @@ public class HyperJunctionBlock extends ActionTubeBlock implements EntityBlock {
 
     @Override
     public InteractionResult onWrenched(BlockState state, UseOnContext context) {
-        if (context.getLevel().isClientSide) return InteractionResult.SUCCESS;
+        if (context.getLevel().isClientSide()) return InteractionResult.SUCCESS;
         if (context.getPlayer() == null) return InteractionResult.PASS;
         if (super.onWrenched(state, context) == InteractionResult.SUCCESS) return InteractionResult.SUCCESS;
 
@@ -175,7 +176,7 @@ public class HyperJunctionBlock extends ActionTubeBlock implements EntityBlock {
     public VoxelShape getShape(BlockState state, @Nullable CollisionContext ctx) {
         if (ctx instanceof EntityCollisionContext ecc
                 && ecc.getEntity() != null
-                && PersistentData.get(ecc.getEntity()).getBoolean(TravelConstants.TRAVEL_TAG)) {
+                && PersistentData.get(ecc.getEntity()).getBooleanOr(TravelConstants.TRAVEL_TAG, false)) {
             return VoxelUtils.empty();
         }
         return Shapes.block();

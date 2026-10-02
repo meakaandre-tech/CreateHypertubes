@@ -94,7 +94,7 @@ public class SplitterScenes {
                 .text("Right Click it with a Wrench to cycle through the Splitter modes.");
         scene.idle(15);
         scene.overlay()
-                .showControls(splitterPos.getCenter().add(0, 1.1, -1), Pointing.RIGHT, 30)
+                .showControls(Vec3.atCenterOf(splitterPos).add(0, 1.1, -1), Pointing.RIGHT, 30)
                 .rightClick()
                 .withItem(AllItems.WRENCH.asStack());
         scene.idle(10);
@@ -116,7 +116,7 @@ public class SplitterScenes {
 
         // FORCED CENTER MODE
         scene.overlay()
-                .showControls(splitterPos.getCenter().add(0, 1.1, -1), Pointing.RIGHT, 30)
+                .showControls(Vec3.atCenterOf(splitterPos).add(0, 1.1, -1), Pointing.RIGHT, 30)
                 .rightClick()
                 .withItem(AllItems.WRENCH.asStack());
         scene.idle(10);
@@ -142,7 +142,7 @@ public class SplitterScenes {
 
         // REDSTONE
         scene.overlay()
-                .showControls(splitterPos.getCenter().add(0.5, -0.5, 0), Pointing.UP, 40)
+                .showControls(Vec3.atCenterOf(splitterPos).add(0.5, -0.5, 0), Pointing.UP, 40)
                 .rightClick()
                 .withItem(redstoneDetectorItem.getDefaultInstance());
         scene.idle(10);

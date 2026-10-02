@@ -58,7 +58,7 @@ public abstract class ActionTubeBlockEntity extends TravelInteractTubeBlockEntit
             String directionKey = direction.getSerializedName();
             if (!smartTubesTag.contains(directionKey, Tag.TAG_STRING)) continue;
 
-            String smartTubeId = smartTubesTag.getString(directionKey);
+            String smartTubeId = smartTubesTag.getStringOr(directionKey, "");
             ITubeAttachment smartTube = ITubeAttachment.get(smartTubeId);
 
             if (smartTube == null) {
@@ -74,7 +74,7 @@ public abstract class ActionTubeBlockEntity extends TravelInteractTubeBlockEntit
     public void addTubeAttachment(Direction direction, ITubeAttachment smartTube) {
         smartTubeAttachments.put(direction, smartTube);
         setChanged();
-        if (level != null && !level.isClientSide) {
+        if (level != null && !level.isClientSide()) {
             level.updateNeighborsAt(worldPosition, getBlockState().getBlock());
             level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
         }
@@ -93,7 +93,7 @@ public abstract class ActionTubeBlockEntity extends TravelInteractTubeBlockEntit
         ITubeAttachment removedAttachment = smartTubeAttachments.remove(direction);
         if (removedAttachment != null) {
             setChanged();
-            if (level != null && !level.isClientSide) {
+            if (level != null && !level.isClientSide()) {
                 level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
                 level.updateNeighborsAt(worldPosition, getBlockState().getBlock());
             }

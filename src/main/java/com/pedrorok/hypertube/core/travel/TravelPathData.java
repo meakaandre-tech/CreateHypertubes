@@ -46,11 +46,11 @@ public class TravelPathData {
         this.blockConnections = new ArrayList<>();
         this.actionPoints = new HashSet<>();
         this.facingDirection = facingDirection;
-        travelPoints.add(entrancePos.getCenter());
+        travelPoints.add(Vec3.atCenterOf(entrancePos));
         blockConnections.add(entrancePos);
 
         BlockPos firstPipe = entrancePos.relative(facingDirection);
-        travelPoints.add(firstPipe.getCenter());
+        travelPoints.add(Vec3.atCenterOf(firstPipe));
         blockConnections.add(firstPipe);
         addTravelPoint(entrancePos, level, true, facingDirection);
         addTravelPoint(firstPipe, level, facingDirection);
@@ -90,7 +90,7 @@ public class TravelPathData {
             if (tubeBlockEntity.getConnections().size() > 2 ) {
                 junctionDirection = connectingFrom;
                 blockConnections.add(pos);
-                travelPoints.add(pos.getCenter());
+                travelPoints.add(Vec3.atCenterOf(pos));
                 finishWithJunction = true;
                 return;
             }
@@ -111,7 +111,7 @@ public class TravelPathData {
             if (!connection.canTravelConnect(level, nextPipe, direction)
                     && (level.getBlockEntity(nextPipe) instanceof ITubeConnectionEntity tubeEntity && !tubeEntity.isConnected()))
                 continue;
-            travelPoints.add(nextPipe.getCenter());
+            travelPoints.add(Vec3.atCenterOf(nextPipe));
             blockConnections.add(nextPipe);
             addTravelPoint(nextPipe, level, direction);
             break;

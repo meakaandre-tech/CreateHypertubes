@@ -173,7 +173,7 @@ public class HyperEntranceBlock extends ActionTubeBlock implements EntityBlock, 
     public VoxelShape getShape(BlockState state, @Nullable CollisionContext ctx) {
         if (ctx instanceof EntityCollisionContext ecc
             && ecc.getEntity() != null
-            && PersistentData.get(ecc.getEntity()).getBoolean(TravelConstants.TRAVEL_TAG)) {
+            && PersistentData.get(ecc.getEntity()).getBooleanOr(TravelConstants.TRAVEL_TAG, false)) {
             return VoxelUtils.empty();
         }
         return switch (state.getValue(FACING)) {
@@ -193,7 +193,7 @@ public class HyperEntranceBlock extends ActionTubeBlock implements EntityBlock, 
 
     @Override
     public InteractionResult onWrenched(BlockState state, UseOnContext context) {
-        if (context.getLevel().isClientSide) return InteractionResult.SUCCESS;
+        if (context.getLevel().isClientSide()) return InteractionResult.SUCCESS;
         if (super.onWrenched(state, context) == InteractionResult.SUCCESS) return InteractionResult.SUCCESS;
 
         BlockEntity blockEntity = context.getLevel().getBlockEntity(context.getClickedPos());

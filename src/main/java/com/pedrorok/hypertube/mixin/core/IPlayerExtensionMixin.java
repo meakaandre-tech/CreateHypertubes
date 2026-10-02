@@ -19,7 +19,7 @@ public interface IPlayerExtensionMixin {
     @Inject(method = "mayFly", at = @At("HEAD"), cancellable = true)
     default void createHypertube$mayFly(CallbackInfoReturnable<Boolean> cir) {
         Player player = (Player) (Object) this;
-        if (!PersistentData.get(player).getBoolean(TravelConstants.TRAVEL_TAG)) return;
+        if (!PersistentData.get(player).getBooleanOr(TravelConstants.TRAVEL_TAG, false)) return;
         cir.setReturnValue(false);
     }
 }

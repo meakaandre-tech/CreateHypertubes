@@ -63,7 +63,7 @@ public class TubePathBlock extends Block implements EntityBlock, SimpleWaterlogg
     protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         if (context instanceof EntityCollisionContext ecc
                 && ecc.getEntity() != null
-                && PersistentData.get(ecc.getEntity()).getBoolean(TravelConstants.TRAVEL_TAG)) {
+                && PersistentData.get(ecc.getEntity()).getBooleanOr(TravelConstants.TRAVEL_TAG, false)) {
             return VoxelUtils.empty();
         }
         return level.getBlockEntity(pos) instanceof TubePathBlockEntity filler ? filler.shape() : VoxelUtils.empty();
@@ -111,7 +111,7 @@ public class TubePathBlock extends Block implements EntityBlock, SimpleWaterlogg
         Level level = context.getLevel();
         BlockPos pos = context.getClickedPos();
         severConnection(level, pos, context.getPlayer(), true);
-        if (!level.isClientSide) {
+        if (!level.isClientSide()) {
             IWrenchable.playRemoveSound(level, pos);
         }
         return InteractionResult.SUCCESS;
@@ -120,7 +120,7 @@ public class TubePathBlock extends Block implements EntityBlock, SimpleWaterlogg
     @Override
     public InteractionResult onWrenched(BlockState state, UseOnContext context) {
         Level level = context.getLevel();
-        if (level.isClientSide) return InteractionResult.SUCCESS;
+        if (level.isClientSide()) return InteractionResult.SUCCESS;
         BezierConnection bezier = TubeFiller.ownerBezier(level, context.getClickedPos());
         if (bezier != null) {
             bezier.updateTubeSegments(level);
@@ -130,7 +130,7 @@ public class TubePathBlock extends Block implements EntityBlock, SimpleWaterlogg
     }
 
     private static void severConnection(Level level, BlockPos pos, Player player, boolean toInventory) {
-        if (level.isClientSide) return;
+        if (level.isClientSide()) return;
         BezierConnection bezier = TubeFiller.ownerBezier(level, pos);
         if (bezier == null) return;
         int toDrop = (int) bezier.distance();

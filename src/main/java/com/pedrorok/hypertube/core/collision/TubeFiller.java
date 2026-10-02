@@ -28,7 +28,7 @@ public final class TubeFiller {
     }
 
     public static void place(Level level, BezierConnection bezier) {
-        if (level == null || level.isClientSide) return;
+        if (level == null || level.isClientSide()) return;
 
         BlockPos owner = bezier.getFromPos().pos();
         List<Vec3> points = bezier.getBezierPoints(level, owner);
@@ -49,7 +49,7 @@ public final class TubeFiller {
     }
 
     public static void remove(Level level, BezierConnection bezier) {
-        if (level == null || level.isClientSide) return;
+        if (level == null || level.isClientSide()) return;
 
         BlockPos owner = bezier.getFromPos().pos();
         List<Vec3> points = bezier.getBezierPoints(level, owner);
@@ -69,7 +69,7 @@ public final class TubeFiller {
     }
 
     public static void removeAll(Level level, BezierConnection bezier) {
-        if (level == null || level.isClientSide) return;
+        if (level == null || level.isClientSide()) return;
 
         remove(level, bezier);
 

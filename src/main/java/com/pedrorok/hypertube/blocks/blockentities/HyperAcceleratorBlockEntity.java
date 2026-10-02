@@ -1,5 +1,6 @@
 package com.pedrorok.hypertube.blocks.blockentities;
 
+import net.minecraft.world.phys.Vec3;
 import com.pedrorok.hypertube.core.data.PersistentData;
 import com.pedrorok.hypertube.HypertubeMod;
 import com.pedrorok.hypertube.blocks.HyperAcceleratorBlock;
@@ -22,7 +23,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.Tuple;
+import com.pedrorok.hypertube.utils.Tuple;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -77,7 +78,7 @@ public class HyperAcceleratorBlockEntity extends ActionTubeBlockEntity implement
     @Override
     public void tick() {
         super.tick();
-        if (level.isClientSide) {
+        if (level.isClientSide()) {
             tickClient();
             return;
         }
@@ -88,9 +89,9 @@ public class HyperAcceleratorBlockEntity extends ActionTubeBlockEntity implement
         float actualSpeed = Math.abs(this.getSpeed());
         Boolean isOpen = state.getValue(HyperAcceleratorBlock.OPEN);
 
-        LivingEntity nearbyEntity = getNearbyLivingEntities((ServerLevel) level, pos.getCenter());
+        LivingEntity nearbyEntity = getNearbyLivingEntities((ServerLevel) level, Vec3.atCenterOf(pos));
 
-        boolean canOpen = nearbyEntity != null && PersistentData.get(nearbyEntity).getBoolean(TravelConstants.TRAVEL_TAG);
+        boolean canOpen = nearbyEntity != null && PersistentData.get(nearbyEntity).getBooleanOr(TravelConstants.TRAVEL_TAG, false);
 
         isTubeClosed(canOpen, isOpen);
     }
@@ -198,7 +199,7 @@ public class HyperAcceleratorBlockEntity extends ActionTubeBlockEntity implement
     @Override
     public void remove() {
         super.remove();
-        if (level.isClientSide) {
+        if (level.isClientSide()) {
             TubeSoundManager.TubeAmbientSound sound = TubeSoundManager.getAmbientSound(tubeSoundId);
             sound.stopSound();
         }
@@ -207,7 +208,7 @@ public class HyperAcceleratorBlockEntity extends ActionTubeBlockEntity implement
 
     // --------- Stress Methods ---------
     public float calculateStressApplied() {
-        float impact = (float) ServerConfig.get().STRESS_IMPACT_ACCELERATOR.getAsDouble();
+        float impact = (float) ServerConfig.get().STRESS_IMPACT_ACCELERATOR.get();
         this.lastStressApplied = impact;
         return impact;
     }

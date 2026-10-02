@@ -25,7 +25,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.Tuple;
+import com.pedrorok.hypertube.utils.Tuple;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -89,7 +89,7 @@ public class HyperJunctionBlockEntity extends ActionTubeBlockEntity implements I
     @Override
     public void tick() {
         super.tick();
-        if (level.isClientSide) {
+        if (level.isClientSide()) {
             tickClient();
             return;
         }
@@ -100,9 +100,9 @@ public class HyperJunctionBlockEntity extends ActionTubeBlockEntity implements I
         float actualSpeed = Math.abs(this.getSpeed());
         Boolean isOpen = state.getValue(HyperJunctionBlock.OPEN);
 
-        LivingEntity nearbyEntity = getNearbyLivingEntities((ServerLevel) level, pos.getCenter());
+        LivingEntity nearbyEntity = getNearbyLivingEntities((ServerLevel) level, Vec3.atCenterOf(pos));
 
-        boolean canOpen = nearbyEntity != null && PersistentData.get(nearbyEntity).getBoolean(TravelConstants.TRAVEL_TAG);
+        boolean canOpen = nearbyEntity != null && PersistentData.get(nearbyEntity).getBooleanOr(TravelConstants.TRAVEL_TAG, false);
 
         isTubeClosed(canOpen, isOpen);
     }
@@ -220,11 +220,11 @@ public class HyperJunctionBlockEntity extends ActionTubeBlockEntity implements I
                 && connectionDirection != null
                 && connectionDirection.getOpposite() == getBlockState().getValue(HyperJunctionBlock.FACING)) {
             Direction facing = getBlockState().getValue(HyperJunctionBlock.FACING);
-            if (level == null) return Vec3.atLowerCornerOf(facing.getNormal());
+            if (level == null) return Vec3.atLowerCornerOf(facing.getUnitVec3i());
             facing = level.getRandom().nextBoolean() ? facing.getClockWise() : facing.getCounterClockWise();
-            return Vec3.atLowerCornerOf(facing.getNormal());
+            return Vec3.atLowerCornerOf(facing.getUnitVec3i());
         }
-        return connectionDirection != null ? Vec3.atLowerCornerOf(connectionDirection.getNormal()) : null;
+        return connectionDirection != null ? Vec3.atLowerCornerOf(connectionDirection.getUnitVec3i()) : null;
     }
 
     @Override
@@ -245,7 +245,7 @@ public class HyperJunctionBlockEntity extends ActionTubeBlockEntity implements I
     @Override
     public void remove() {
         super.remove();
-        if (level.isClientSide) {
+        if (level.isClientSide()) {
             TubeSoundManager.TubeAmbientSound sound = TubeSoundManager.getAmbientSound(tubeSoundId);
             sound.stopSound();
         }
@@ -254,7 +254,7 @@ public class HyperJunctionBlockEntity extends ActionTubeBlockEntity implements I
 
     // --------- Stress Methods ---------
     public float calculateStressApplied() {
-        float impact = (float) ServerConfig.get().STRESS_IMPACT_ACCELERATOR.getAsDouble();
+        float impact = (float) ServerConfig.get().STRESS_IMPACT_ACCELERATOR.get();
         this.lastStressApplied = impact;
         return impact;
     }

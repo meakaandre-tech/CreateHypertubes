@@ -35,15 +35,15 @@ public class ClientKeyInputTracker {
 
         if (forwardDown && !wasForwardDown) {
             lastDirection = MoveDirection.FRONT;
-            player.playSound(ModSounds.CHOSE_DIRECTION.get(), 1.0f, 0.7f + player.level().random.nextFloat() * 0.2f);
+            player.playSound(ModSounds.CHOSE_DIRECTION.get(), 1.0f, 0.7f + player.level().getRandom().nextFloat() * 0.2f);
         }
         if (leftDown && !wasLeftDown) {
             lastDirection = MoveDirection.LEFT;
-            player.playSound(ModSounds.CHOSE_DIRECTION.get(), 1.0f, 0.7f + player.level().random.nextFloat() * 0.2f);
+            player.playSound(ModSounds.CHOSE_DIRECTION.get(), 1.0f, 0.7f + player.level().getRandom().nextFloat() * 0.2f);
         }
         if (rightDown && !wasRightDown) {
             lastDirection = MoveDirection.RIGHT;
-            player.playSound(ModSounds.CHOSE_DIRECTION.get(), 1.0f, 0.7f + player.level().random.nextFloat() * 0.2f);
+            player.playSound(ModSounds.CHOSE_DIRECTION.get(), 1.0f, 0.7f + player.level().getRandom().nextFloat() * 0.2f);
         }
 
         wasForwardDown = forwardDown;

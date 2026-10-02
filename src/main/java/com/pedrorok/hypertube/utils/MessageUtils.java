@@ -15,7 +15,7 @@ public class MessageUtils {
     }
 
     public static void sendActionMessage(Player player, Component message, boolean forceStay) {
-        if (!forceStay && PersistentData.get(player).getLong("last_action_message_stay") > System.currentTimeMillis()) {
+        if (!forceStay && PersistentData.get(player).getLongOr("last_action_message_stay", 0L) > System.currentTimeMillis()) {
             return; // Don't send if the last message is still active
         }
         if (forceStay) {

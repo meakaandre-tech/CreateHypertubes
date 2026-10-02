@@ -60,18 +60,18 @@ public class TubeScenes {
                 .showText(70)
                 .text("To create a Hypertube connection, Just Right Click the tube while holding another tube.")
                 .attachKeyFrame()
-                .pointAt(block1.getCenter().add(0, -0.6, 0.3))
+                .pointAt(Vec3.atCenterOf(block1).add(0, -0.6, 0.3))
                 .placeNearTarget();
         scene.idle(20);
         scene.overlay()
-                .showControls(block1.getCenter().add(0, 0, 0.3), Pointing.LEFT, 40)
+                .showControls(Vec3.atCenterOf(block1).add(0, 0, 0.3), Pointing.LEFT, 40)
                 .rightClick()
                 .withItem(tubeItem);
         scene.idle(70);
 
 
         scene.overlay()
-                .showControls(block2.getCenter().add(0, 0, 0), Pointing.DOWN, 50)
+                .showControls(Vec3.atCenterOf(block2).add(0, 0, 0), Pointing.DOWN, 50)
                 .rightClick()
                 .withItem(tubeItem);
         scene.idle(5);
@@ -79,7 +79,7 @@ public class TubeScenes {
                 .showText(40)
                 .text("Than place the second tube and the connection will be created.")
                 .attachKeyFrame()
-                .pointAt(block2.getCenter().add(0, -0.5, 0.3))
+                .pointAt(Vec3.atCenterOf(block2).add(0, -0.5, 0.3))
                 .placeNearTarget();
         scene.idle(5);
 
@@ -128,12 +128,12 @@ public class TubeScenes {
         scene.idle(20);
 
         scene.overlay()
-                .showControls(blockL2.getCenter().add(0, 0, 0.3), Pointing.LEFT, 15)
+                .showControls(Vec3.atCenterOf(blockL2).add(0, 0, 0.3), Pointing.LEFT, 15)
                 .rightClick()
                 .withItem(ModBlocks.HYPERTUBE.asStack());
         scene.idle(25);
         scene.overlay()
-                .showControls(blockR1.getCenter().add(0, 0, -0.3), Pointing.RIGHT, 15)
+                .showControls(Vec3.atCenterOf(blockR1).add(0, 0, -0.3), Pointing.RIGHT, 15)
                 .rightClick()
                 .withItem(ModBlocks.HYPERTUBE.asStack());
         scene.idle(20);
@@ -148,7 +148,7 @@ public class TubeScenes {
         scene.idle(80);
         scene.addKeyframe();
         scene.overlay()
-                .showControls(blockR1.getCenter().add(0, 0.5, 0), Pointing.DOWN, 15)
+                .showControls(Vec3.atCenterOf(blockR1).add(0, 0.5, 0), Pointing.DOWN, 15)
                 .rightClick()
                 .withItem(AllItems.WRENCH.asStack());
         scene.idle(10);
@@ -161,7 +161,7 @@ public class TubeScenes {
                 .pointAt(new Vec3(1, 3, 1))
                 .independent();
         scene.overlay()
-                .showControls(blockL1.getCenter().add(0, 0, 0.3), Pointing.LEFT, 15)
+                .showControls(Vec3.atCenterOf(blockL1).add(0, 0, 0.3), Pointing.LEFT, 15)
                 .rightClick()
                 .withItem(AllItems.WRENCH.asStack());
         scene.idle(10);

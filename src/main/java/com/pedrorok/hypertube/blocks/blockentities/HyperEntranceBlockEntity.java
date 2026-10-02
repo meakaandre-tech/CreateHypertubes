@@ -22,7 +22,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.Tuple;
+import com.pedrorok.hypertube.utils.Tuple;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -74,7 +74,7 @@ public class HyperEntranceBlockEntity extends ActionTubeBlockEntity implements I
     public void tick() {
         super.tick();
         Boolean isBlocked = getBlockState().getValue(HyperEntranceBlock.IN_FRONT);
-        if (level.isClientSide) {
+        if (level.isClientSide()) {
             tickClient(isBlocked);
             return;
         }
@@ -94,22 +94,22 @@ public class HyperEntranceBlockEntity extends ActionTubeBlockEntity implements I
         }
 
         boolean isNotLocked = !getBlockState().getValue(HyperEntranceBlock.LOCKED);
-        LivingEntity nearbyEntity = getNearbyLivingEntities((ServerLevel) level, pos.getCenter());
+        LivingEntity nearbyEntity = getNearbyLivingEntities((ServerLevel) level, Vec3.atCenterOf(pos));
 
-        boolean canOpen = nearbyEntity != null && (isNotLocked || nearbyEntity.isShiftKeyDown() || PersistentData.get(nearbyEntity).getBoolean(TravelConstants.TRAVEL_TAG));
+        boolean canOpen = nearbyEntity != null && (isNotLocked || nearbyEntity.isShiftKeyDown() || PersistentData.get(nearbyEntity).getBooleanOr(TravelConstants.TRAVEL_TAG, false));
 
         if (isTubeClosed(canOpen, isOpen)) return;
 
-        LivingEntity inRangeEntity = getInRangeLivingEntities((ServerLevel) level, pos.getCenter(), state.getValue(HyperEntranceBlock.FACING));
+        LivingEntity inRangeEntity = getInRangeLivingEntities((ServerLevel) level, Vec3.atCenterOf(pos), state.getValue(HyperEntranceBlock.FACING));
         if (inRangeEntity == null) return;
 
-        if (isNotLocked && inRangeEntity.isShiftKeyDown() && !PersistentData.get(inRangeEntity).getBoolean(TravelConstants.TRAVEL_TAG)) {
+        if (isNotLocked && inRangeEntity.isShiftKeyDown() && !PersistentData.get(inRangeEntity).getBooleanOr(TravelConstants.TRAVEL_TAG, false)) {
             return;
         }
 
         boolean hasStartedTravel = TravelManager.tryStartTravel(inRangeEntity, this, state.getValue(HyperEntranceBlock.FACING), TubeUtils.calculateTravelSpeed(actualSpeed));
         if (!hasStartedTravel) return;
-        TubeSoundManager.playTubeSuctionSound(inRangeEntity, getBlockPos().getCenter());
+        TubeSoundManager.playTubeSuctionSound(inRangeEntity, Vec3.atCenterOf(getBlockPos()));
     }
     private void tickClient(boolean isBlocked) {
         float actualSpeed = Math.abs(this.getSpeed());
@@ -194,7 +194,7 @@ public class HyperEntranceBlockEntity extends ActionTubeBlockEntity implements I
     public Vec3 getExitDirection(@Nullable Direction connectionDirection) {
         if (getBlockState().hasProperty(HyperEntranceBlock.FACING)) {
             Direction facing = getBlockState().getValue(HyperEntranceBlock.FACING).getOpposite();
-            return Vec3.atLowerCornerOf(facing.getNormal());
+            return Vec3.atLowerCornerOf(facing.getUnitVec3i());
         }
         return null;
     }
@@ -207,7 +207,7 @@ public class HyperEntranceBlockEntity extends ActionTubeBlockEntity implements I
 
     // --------- Stress Methods ---------
     public float calculateStressApplied() {
-        float impact = (float) ServerConfig.get().STRESS_IMPACT_ENTRANCE.getAsDouble();
+        float impact = (float) ServerConfig.get().STRESS_IMPACT_ENTRANCE.get();
         this.lastStressApplied = impact;
         return impact;
     }

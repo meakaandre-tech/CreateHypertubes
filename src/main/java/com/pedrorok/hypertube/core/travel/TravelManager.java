@@ -5,8 +5,6 @@ import com.mojang.datafixers.util.Pair;
 import com.pedrorok.hypertube.HypertubeMod;
 import com.pedrorok.hypertube.blocks.HyperEntranceBlock;
 import com.pedrorok.hypertube.blocks.HyperJunctionBlock;
-import com.pedrorok.hypertube.core.compat.Mods;
-import com.pedrorok.hypertube.core.compat.sable.SableCompat;
 import com.pedrorok.hypertube.core.data.MoveDirection;
 import com.pedrorok.hypertube.core.sound.TubeSoundManager;
 import com.pedrorok.hypertube.events.PlayerSyncEvents;
@@ -22,7 +20,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.Tuple;
+import com.pedrorok.hypertube.utils.Tuple;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
@@ -56,17 +54,17 @@ public class TravelManager {
         boolean isJunction = state.getBlock() instanceof HyperJunctionBlock;
 
         CompoundTag entityPersistentData = PersistentData.get(entity);
-        if (entityPersistentData.getBoolean(TRAVEL_TAG) && !isJunction) return false;
+        if (entityPersistentData.getBooleanOr(TRAVEL_TAG, false) && !isJunction) return false;
 
         boolean isPlayer = entity instanceof ServerPlayer;
         ServerPlayer player = isPlayer ? (ServerPlayer) entity : null;
 
         if (isPlayer && player.gameMode.getGameModeForPlayer().equals(GameType.SPECTATOR)) return false;
 
-        long lastTravelTime = entityPersistentData.getLong(LAST_TRAVEL_TIME);
+        long lastTravelTime = entityPersistentData.getLongOr(LAST_TRAVEL_TIME, 0L);
 
         if (entityPersistentData.contains(LAST_TRAVEL_BLOCKPOS) && !isJunction) {
-            BlockPos lastTravelPos = BlockPos.of(entityPersistentData.getLong(LAST_TRAVEL_BLOCKPOS));
+            BlockPos lastTravelPos = BlockPos.of(entityPersistentData.getLongOr(LAST_TRAVEL_BLOCKPOS, 0L));
             if (lastTravelPos.equals(pos)
                     && lastTravelTime > System.currentTimeMillis()) {
                 return false;
@@ -74,7 +72,7 @@ public class TravelManager {
         }
 
         if (lastTravelTime - DEFAULT_AFTER_TUBE_CAMERA > System.currentTimeMillis() && !isJunction) {
-            speed += entityPersistentData.getFloat(LAST_TRAVEL_SPEED);
+            speed += entityPersistentData.getFloatOr(LAST_TRAVEL_SPEED, 0f);
         }
 
         TravelPathData travelPathData = new TravelPathData(facingDirection, entity.level(), pos);
@@ -103,8 +101,7 @@ public class TravelManager {
                 travelPathData.isFinishWithJunction(),
                 travelPathData.getJunctionDirection());
         NetworkHandler.sendToPlayersTrackingEntityAndSelf(entity, movePathPacket);
-        Vec3 center = pos.getCenter();
-        Mods.SABLE.executeIfInstalled(() -> () -> SableCompat.stickToSubLevel(entity, center));
+        Vec3 center = Vec3.atCenterOf(pos);
 
         syncPersistentData(entity);
 
@@ -114,11 +111,11 @@ public class TravelManager {
 
     public static void entityTick(LivingEntity entity) {
         handleCommon(entity);
-        if (entity.level().isClientSide && entity instanceof Player player) {
+        if (entity.level().isClientSide() && entity instanceof Player player) {
             clientTick(player);
             return;
         }
-        if (entity.level().isClientSide) return;
+        if (entity.level().isClientSide()) return;
         handleServer(entity);
     }
 
@@ -145,7 +142,7 @@ public class TravelManager {
         final boolean forced = data.isForced();
         final LivingEntity entity = data.entity();
         final Level level = entity.level();
-        if (level.isClientSide) return;
+        if (level.isClientSide()) return;
         TravelPathMover pathMover = travelDataMap.get(entity.getUUID());
         travelDataMap.remove(entity.getUUID());
         PersistentData.get(entity).putBoolean(TRAVEL_TAG, false);
@@ -165,7 +162,7 @@ public class TravelManager {
         }
 
         Vec3 lastDir = pathMover.getLastDir();
-        Vec3 lastBlockPos = pathMover.getLastPos().getCenter();
+        Vec3 lastBlockPos = Vec3.atCenterOf(pathMover.getLastPos());
         BlockState blockState = level.getBlockState(BlockPos.containing(lastBlockPos));
         if (blockState.getBlock() instanceof HyperEntranceBlock) {
             lastBlockPos = pathMover.getLastPos().relative(blockState.getValue(HyperEntranceBlock.FACING).getOpposite()).getCenter();
@@ -183,12 +180,10 @@ public class TravelManager {
         }
 
         Pair<Vec3, Vec3> lastPosDir = Pair.of(lastBlockPos, lastDir);
-        lastPosDir = Mods.SABLE.executeIfInstalled(() -> (posDir) -> SableCompat.transformToWorld(level, posDir.getFirst(), posDir.getSecond()), lastPosDir);
         lastBlockPos = lastPosDir.getFirst();
         lastDir = lastPosDir.getSecond();
         lastBlockPos = lastBlockPos.add(lastDir.scale(0.5));
 
-        Mods.SABLE.executeIfInstalled(() -> () -> SableCompat.stickToSubLevel(entity, null));
 
         if (level instanceof ServerLevel) {
             entity.teleportTo((ServerLevel) level, lastBlockPos.x, lastBlockPos.y, lastBlockPos.z, RelativeMovement.ALL, entity.getYRot(), entity.getXRot());
@@ -230,7 +225,7 @@ public class TravelManager {
 
     private static void handleServer(LivingEntity entity) {
         if (!travelDataMap.containsKey(entity.getUUID())) {
-            if (!PersistentData.get(entity).getBoolean(TRAVEL_TAG)) return;
+            if (!PersistentData.get(entity).getBooleanOr(TRAVEL_TAG, false)) return;
             PersistentData.get(entity).putBoolean(TRAVEL_TAG, false);
             return;
         }
@@ -240,7 +235,7 @@ public class TravelManager {
     }
 
     public static boolean hasHyperTubeData(Entity entity) {
-        return PersistentData.get(entity).getBoolean(TRAVEL_TAG);
+        return PersistentData.get(entity).getBooleanOr(TRAVEL_TAG, false);
     }
 
 

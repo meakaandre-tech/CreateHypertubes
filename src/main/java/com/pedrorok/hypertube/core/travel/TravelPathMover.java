@@ -2,8 +2,6 @@ package com.pedrorok.hypertube.core.travel;
 
 import com.mojang.datafixers.util.Pair;
 import com.pedrorok.hypertube.blocks.blockentities.parent.ActionTubeBlockEntity;
-import com.pedrorok.hypertube.core.compat.Mods;
-import com.pedrorok.hypertube.core.compat.sable.SableCompat;
 import com.pedrorok.hypertube.core.connection.interfaces.ITubeActionPoint;
 import com.pedrorok.hypertube.core.data.MoveDirection;
 import com.pedrorok.hypertube.network.packets.EntityTravelDirDataPacket;
@@ -13,7 +11,7 @@ import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.util.Tuple;
+import com.pedrorok.hypertube.utils.Tuple;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -159,7 +157,6 @@ public class TravelPathMover {
 
         Pair<Vec3, Vec3> posDir = Pair.of(currentStart.lerp(currentEnd, traveled / totalDistance),
                 currentEnd.subtract(currentStart).normalize());
-        posDir = Mods.SABLE.executeIfInstalled(() -> (pd) -> SableCompat.transformToWorld(entity.level(), pd.getFirst(), pd.getSecond()), posDir);
 
         Vec3 newPos = posDir.getFirst();
 
@@ -183,7 +180,7 @@ public class TravelPathMover {
 
     public void setChosenDirection(Direction direction) {
         this.chosenDirection = direction;
-        this.lastDirection = Vec3.atLowerCornerOf(chosenDirection.getNormal());
+        this.lastDirection = Vec3.atLowerCornerOf(chosenDirection.getUnitVec3i());
         this.pathPoints.removeLast();
         this.pathPoints.add(pathPoints.getLast().add(this.lastDirection));
     }
@@ -194,7 +191,7 @@ public class TravelPathMover {
         float pitch = (float) Math.toDegrees(Math.atan2(-direction.y, Math.sqrt(direction.x * direction.x + direction.z * direction.z)));
         entity.setYRot(yaw);
         entity.setXRot(pitch);
-        if (entity.level().isClientSide) return;
+        if (entity.level().isClientSide()) return;
         NetworkHandler.sendToPlayersTrackingEntity(entity, EntityTravelDirDataPacket.create(entity));
     }
 

@@ -89,7 +89,7 @@ public class TubeUtils {
         boolean collision = false;
         for (BlockPos blockPos : TubeCollision.occupied(bezierConnection.getBezierPoints(level, bezierConnection.getFromPos().pos()))) {
             if (hasCollision(level, blockPos)) {
-                if (!level.isClientSide) {
+                if (!level.isClientSide()) {
                     return ResponseDTO.invalid("placement.create_hypertube.block_collision");
                 }
                 collision = true;
@@ -102,7 +102,7 @@ public class TubeUtils {
 
     private static boolean hasCollision(Level level, BlockPos blockPos) {
         boolean hasCollision = !level.getBlockState(blockPos).getCollisionShape(level, blockPos).isEmpty();
-        if (hasCollision && level.isClientSide) {
+        if (hasCollision && level.isClientSide()) {
             BezierConnection.outlineBlocks(blockPos);
         }
         return hasCollision;
