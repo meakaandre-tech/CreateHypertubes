@@ -1,0 +1,5 @@
+net.minecraft.server.network.ServerGamePacketListenerImpl
+net.minecraft.client.renderer.entity.LivingEntityRenderer
+net.minecraft.client.renderer.LevelRenderer
+net.minecraft.client.renderer.GameRenderer
+net.minecraft.client.KeyMapping$Category

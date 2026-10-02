@@ -2,7 +2,6 @@ package com.pedrorok.hypertube.mixin.core;
 
 import com.pedrorok.hypertube.core.data.PersistentData;
 import com.pedrorok.hypertube.core.travel.TravelConstants;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
@@ -27,19 +26,5 @@ public class EntityTravelingMixin {
         if (!(((Entity) (Object) this) instanceof LivingEntity player)
             || !PersistentData.get(player).getBooleanOr(TravelConstants.TRAVEL_TAG, false)) return;
         cir.setReturnValue(Pose.STANDING);
-    }
-
-    @Inject(method = "hurt", at = @At("HEAD"), cancellable = true)
-    private void createHypertube$cancelHurt(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
-        if (!(((Entity) (Object) this) instanceof LivingEntity entity)
-            || !PersistentData.get(entity).getBooleanOr(TravelConstants.TRAVEL_TAG, false)) return;
-        cir.setReturnValue(false);
-    }
-
-    @Inject(method = "isInvulnerableTo", at = @At("HEAD"), cancellable = true)
-    private void createHypertube$cancelInvulnerableTo(DamageSource source, CallbackInfoReturnable<Boolean> cir) {
-        if (!(((Entity) (Object) this) instanceof LivingEntity entity)
-            || !PersistentData.get(entity).getBooleanOr(TravelConstants.TRAVEL_TAG, false)) return;
-        cir.setReturnValue(true);
     }
 }

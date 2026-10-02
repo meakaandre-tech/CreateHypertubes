@@ -2,15 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "B": {
-      "item": "create:brass_sheet"
-    },
-    "H": {
-      "item": "create_hypertube:hypertube"
-    },
-    "K": {
-      "item": "minecraft:dried_kelp"
-    }
+    "B": "create:brass_sheet",
+    "H": "create_hypertube:hypertube",
+    "K": "minecraft:dried_kelp"
   },
   "pattern": [
     " B ",

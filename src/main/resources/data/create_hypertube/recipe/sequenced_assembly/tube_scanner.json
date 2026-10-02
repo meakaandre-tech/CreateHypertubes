@@ -1,65 +1,37 @@
 {
   "type": "create:sequenced_assembly",
-  "ingredient": {
-    "item": "create_hypertube:redstone_detector_tube_attachment"
+  "ingredient": "create_hypertube:redstone_detector_tube_attachment",
+  "transitional_item": {
+    "id": "create_hypertube:tube_scanner_unfinished"
   },
-  "results": [
-    {
-      "chance": 100.0,
-      "id": "create_hypertube:tube_scanner_attachment"
-    }
-  ],
+  "result": {
+    "id": "create_hypertube:tube_scanner_attachment"
+  },
+  "loops": 1,
   "sequence": [
     {
       "type": "create:deploying",
-      "ingredients": [
-        {
-          "item": "create_hypertube:tube_scanner_unfinished"
-        },
-        {
-          "item": "create:brass_sheet"
-        }
-      ],
+      "target": "$ingredient",
+      "ingredient": "create:brass_sheet",
       "results": [
-        {
-          "id": "create_hypertube:tube_scanner_unfinished"
-        }
+        "$result"
       ]
     },
     {
       "type": "create:deploying",
-      "ingredients": [
-        {
-          "item": "create_hypertube:tube_scanner_unfinished"
-        },
-        {
-          "item": "create:electron_tube"
-        }
-      ],
+      "target": "$ingredient",
+      "ingredient": "create:electron_tube",
       "results": [
-        {
-          "id": "create_hypertube:tube_scanner_unfinished"
-        }
+        "$result"
       ]
     },
     {
       "type": "create:deploying",
-      "ingredients": [
-        {
-          "item": "create_hypertube:tube_scanner_unfinished"
-        },
-        {
-          "item": "create:brass_sheet"
-        }
-      ],
+      "target": "$ingredient",
+      "ingredient": "create:brass_sheet",
       "results": [
-        {
-          "id": "create_hypertube:tube_scanner_unfinished"
-        }
+        "$result"
       ]
     }
-  ],
-  "transitional_item": {
-    "id": "create_hypertube:tube_scanner_unfinished"
-  }
+  ]
 }

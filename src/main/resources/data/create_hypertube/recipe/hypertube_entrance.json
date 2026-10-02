@@ -2,15 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "C": {
-      "item": "create:smart_chute"
-    },
-    "F": {
-      "item": "create_hypertube:hypertube_funnel"
-    },
-    "G": {
-      "item": "create:cogwheel"
-    }
+    "C": "create:smart_chute",
+    "F": "create_hypertube:hypertube_funnel",
+    "G": "create:cogwheel"
   },
   "pattern": [
     " F ",

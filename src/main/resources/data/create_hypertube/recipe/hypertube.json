@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "B": {
-      "item": "create:brass_sheet"
-    },
-    "G": {
-      "tag": "c:glass_panes"
-    }
+    "B": "create:brass_sheet",
+    "G": "#c:glass_panes"
   },
   "pattern": [
     "BGB",

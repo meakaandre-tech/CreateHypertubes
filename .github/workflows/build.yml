@@ -51,6 +51,11 @@ jobs:
             sed 's#/#.#g' /tmp/ci/classes.txt | grep -v 'package-info\|module-info' > /tmp/all-classes.txt
             (xargs -a /tmp/all-classes.txt -n 300 javap -p -cp "$cp" 2>/dev/null || true) | gzip -9 > /tmp/ci/javap-all.txt.gz
           fi
+          if [ -f .github/dump-bytecode ]; then
+            jars=$(find ~/.gradle/caches/fabric-loom .gradle/loom-cache -name '*.jar' 2>/dev/null | grep -iE 'minecraft' | grep -v sources || true)
+            cp=$(echo $jars | tr ' ' ':')
+            (xargs -a .github/dump-bytecode javap -p -c -cp "$cp" 2>/dev/null || true) | gzip -9 > /tmp/ci/bytecode.txt.gz
+          fi
       - name: Publish build log to the ci-logs branch
         if: always()
         shell: bash
@@ -71,3 +76,14 @@ jobs:
         with:
           name: create-hypertube-fabric-26.2
           path: build/libs/*.jar
+      - name: Publish the jar as a release
+        if: success()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          gh release delete fabric-26.2-latest -y --cleanup-tag -R "${{ github.repository }}" || true
+          sleep 3
+          jar=$(ls build/libs/*.jar | grep -v sources | head -1)
+          cp "$jar" create-hypertube-fabric-26.2.jar
+          gh release create fabric-26.2-latest create-hypertube-fabric-26.2.jar -R "${{ github.repository }}" --target "${GITHUB_SHA}" --title "Create: Hypertubes for Fabric 26.2 (pack build)" --notes "Built from the fabric-26.2 branch at ${GITHUB_SHA}. Needs Create Fly and Fabric API."
