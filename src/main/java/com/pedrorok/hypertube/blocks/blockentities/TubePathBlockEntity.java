@@ -5,6 +5,8 @@ import com.pedrorok.hypertube.utils.VoxelUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
@@ -76,8 +78,8 @@ public class TubePathBlockEntity extends BlockEntity {
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-        super.saveAdditional(tag, registries);
+    protected void saveAdditional(ValueOutput tag) {
+        super.saveAdditional(tag);
         if (owner == null) {
             return;
         }
@@ -99,17 +101,17 @@ public class TubePathBlockEntity extends BlockEntity {
     }
 
     @Override
-    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-        super.loadAdditional(tag, registries);
+    protected void loadAdditional(ValueInput tag) {
+        super.loadAdditional(tag);
         owner = null;
         shape = Shapes.empty();
 
-        int[] stored = tag.getIntArray(KEY_OWNER);
+        int[] stored = tag.getIntArray(KEY_OWNER).orElse(new int[0]);
         if (stored.length == 3) {
             owner = new BlockPos(stored[0], stored[1], stored[2]).offset(worldPosition);
         }
 
-        int[] packed = tag.getIntArray(KEY_BOX);
+        int[] packed = tag.getIntArray(KEY_BOX).orElse(new int[0]);
         if (packed.length >= 6 && packed.length % 6 == 0) {
             List<AABB> boxes = new ArrayList<>(packed.length / 6);
             for (int i = 0; i < packed.length; i += 6) {
@@ -123,9 +125,7 @@ public class TubePathBlockEntity extends BlockEntity {
 
     @Override
     public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
-        CompoundTag tag = super.getUpdateTag(registries);
-        saveAdditional(tag, registries);
-        return tag;
+        return saveCustomOnly(registries);
     }
 
     @Override

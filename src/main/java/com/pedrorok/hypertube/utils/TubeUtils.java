@@ -121,18 +121,18 @@ public class TubeUtils {
         int foundTubes = 0;
 
         Inventory inv = player.getInventory();
-        int size = inv.items.size();
+        int size = inv.getNonEquipmentItems().size();
         for (int j = 0; j <= size + 1; j++) {
             int i = j;
             boolean offhand = j == size + 1;
             if (j == size)
-                i = inv.selected;
+                i = inv.getSelectedSlot();
             else if (offhand)
                 i = 0;
-            else if (j == inv.selected)
+            else if (j == inv.getSelectedSlot())
                 continue;
 
-            ItemStack stackInSlot = (offhand ? inv.offhand : inv.items).get(i);
+            ItemStack stackInSlot = offhand ? player.getOffhandItem() : inv.getNonEquipmentItems().get(i);
             boolean isTube = ModBlocks.HYPERTUBE.asStack().is(stackInSlot.getItem());
             if (!isTube)
                 continue;

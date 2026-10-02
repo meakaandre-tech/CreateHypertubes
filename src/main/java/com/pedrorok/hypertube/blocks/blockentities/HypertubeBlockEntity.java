@@ -1,5 +1,7 @@
 package com.pedrorok.hypertube.blocks.blockentities;
 
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 import com.pedrorok.hypertube.HypertubeMod;
 import com.pedrorok.hypertube.blocks.HypertubeBlock;
 import com.pedrorok.hypertube.blocks.blockentities.parent.TubeBlockEntity;
@@ -36,8 +38,9 @@ public class HypertubeBlockEntity extends TubeBlockEntity {
 
     // --------- Nbt Methods ---------
     @Override
-    protected void read(CompoundTag compound, HolderLookup.Provider registries, boolean clientPacket) {
-        super.read(compound, registries, clientPacket);
+    protected void read(ValueInput view, boolean clientPacket) {
+        super.read(view, clientPacket);
+        CompoundTag compound = view.read("HypertubeConnections", CompoundTag.CODEC).orElseGet(CompoundTag::new);
         this.connectionOne = compound.contains("ConnectionTo")
                 ? getConnectionRelative(compound, "ConnectionTo", worldPosition) : null;
         this.connectionTwo = compound.contains("ConnectionFrom")
@@ -45,9 +48,11 @@ public class HypertubeBlockEntity extends TubeBlockEntity {
     }
 
     @Override
-    protected void write(CompoundTag compound, HolderLookup.Provider registries, boolean clientPacket) {
-        super.write(compound, registries, clientPacket);
+    protected void write(ValueOutput view, boolean clientPacket) {
+        super.write(view, clientPacket);
+        CompoundTag compound = new CompoundTag();
         writeConnectionRelative(compound, worldPosition, new Tuple<>(connectionOne, "ConnectionTo"), new Tuple<>(connectionTwo, "ConnectionFrom"));
+        view.store("HypertubeConnections", CompoundTag.CODEC, compound);
     }
     // --------- Nbt Methods ---------
 

@@ -162,7 +162,7 @@ public class TravelPathData {
                 Vec3 last = bezierPoints.get(bezierPoints.size() - 1);
                 Vec3 arrivalVector = last.subtract(secondToLast);
                 if (arrivalVector.lengthSqr() > 0.01) {
-                    entranceDirectionForToPosFinal = Direction.getNearest(arrivalVector.x, arrivalVector.y, arrivalVector.z);
+                    entranceDirectionForToPosFinal = Direction.getApproximateNearest(arrivalVector.x, arrivalVector.y, arrivalVector.z);
                 }
             }
 

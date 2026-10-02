@@ -1,5 +1,6 @@
 package com.pedrorok.hypertube.blocks;
 
+import net.minecraft.world.level.redstone.Orientation;
 import com.pedrorok.hypertube.core.data.PersistentData;
 import com.pedrorok.hypertube.blocks.blockentities.HypertubeBlockEntity;
 import com.pedrorok.hypertube.core.connection.BezierConnection;
@@ -142,8 +143,8 @@ public class HypertubeBlock extends TubeBlock implements EntityBlock {
     }
 
     @Override
-    public void neighborChanged(@NotNull BlockState state, @NotNull Level world, @NotNull BlockPos pos, @NotNull Block block, @NotNull BlockPos pos1, boolean b) {
-        super.neighborChanged(state, world, pos, block, pos1, b);
+    protected void neighborChanged(@NotNull BlockState state, @NotNull Level world, @NotNull BlockPos pos, @NotNull Block block, @Nullable Orientation orientation, boolean b) {
+        super.neighborChanged(state, world, pos, block, orientation, b);
         BlockState newState = getStateFromBlockEntity(state, world, pos);
         world.setBlockAndUpdate(pos, newState);
     }
@@ -257,7 +258,7 @@ public class HypertubeBlock extends TubeBlock implements EntityBlock {
         BlockEntity blockEntity = level.getBlockEntity(pos);
         if (!(blockEntity instanceof ITubeConnectionEntity thisConnection)) return;
         if (!stack.hasFoil()) {
-            level.playSound(null, pos, getSoundType(state, level, pos, placer).getPlaceSound(), SoundSource.BLOCKS,
+            level.playSound(null, pos, getSoundType(state).getPlaceSound(), SoundSource.BLOCKS,
                     1, level.getRandom().nextFloat() * 0.1f + 0.9f);
             if (!player.isShiftKeyDown() && stack == player.getItemInHand(InteractionHand.MAIN_HAND)) {
                 TubePlacement.continueFrom(level, player, pos, getPlacementFacing(player));
@@ -287,7 +288,7 @@ public class HypertubeBlock extends TubeBlock implements EntityBlock {
         BlockEntity otherBlockEntity = level.getBlockEntity(connectionFrom.pos());
         if (!(otherBlockEntity instanceof ITubeConnectionEntity otherConnection)) return;
 
-        level.playSound(null, pos, getSoundType(state, level, pos, placer).getPlaceSound(), SoundSource.BLOCKS,
+        level.playSound(null, pos, getSoundType(state).getPlaceSound(), SoundSource.BLOCKS,
                 1, level.getRandom().nextFloat() * 0.1f + 0.9f);
 
         if (!otherConnection.hasConnectionAvailable()) {
@@ -306,7 +307,7 @@ public class HypertubeBlock extends TubeBlock implements EntityBlock {
     }
 
     @Override
-    public boolean propagatesSkylightDown(@NotNull BlockState state, @NotNull BlockGetter reader, @NotNull BlockPos pos) {
+    protected boolean propagatesSkylightDown(@NotNull BlockState state) {
         return true;
     }
 

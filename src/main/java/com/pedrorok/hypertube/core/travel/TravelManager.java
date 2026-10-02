@@ -24,7 +24,7 @@ import com.pedrorok.hypertube.utils.Tuple;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
-import net.minecraft.world.entity.RelativeMovement;
+import net.minecraft.world.entity.Relative;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
@@ -186,7 +186,7 @@ public class TravelManager {
 
 
         if (level instanceof ServerLevel) {
-            entity.teleportTo((ServerLevel) level, lastBlockPos.x, lastBlockPos.y, lastBlockPos.z, RelativeMovement.ALL, entity.getYRot(), entity.getXRot());
+            entity.teleportTo((ServerLevel) level, lastBlockPos.x, lastBlockPos.y, lastBlockPos.z, Relative.ALL, entity.getYRot(), entity.getXRot(), false);
         }
         entity.setDeltaMovement(lastDir.scale(Math.max(finalSpeed, 1f)));
         entity.hurtMarked = true;

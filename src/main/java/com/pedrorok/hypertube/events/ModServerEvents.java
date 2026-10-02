@@ -50,6 +50,11 @@ public class ModServerEvents {
             living.setPose(Pose.CROUCHING);
         }
         if (!(living instanceof Player player)) return;
+        // NeoForge's mayFly hook has no Fabric equivalent: stop creative flight while inside a tube instead.
+        if (player.getAbilities().flying && TravelManager.hasHyperTubeData(player)) {
+            player.getAbilities().flying = false;
+            player.onUpdateAbilities();
+        }
         TubePlacement.tickPlayerServer(player);
     }
 

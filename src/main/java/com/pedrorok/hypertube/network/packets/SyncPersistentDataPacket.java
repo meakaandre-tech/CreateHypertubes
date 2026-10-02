@@ -4,7 +4,6 @@ import com.pedrorok.hypertube.core.data.PersistentData;
 import com.pedrorok.hypertube.HypertubeMod;
 import com.pedrorok.hypertube.core.travel.TravelConstants;
 import com.pedrorok.hypertube.core.travel.client.ClientTravelPathMover;
-import com.simibubi.create.foundation.networking.ISyncPersistentData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -64,14 +63,11 @@ public record SyncPersistentDataPacket(int entityId, CompoundTag readData) imple
         try {
             Entity entityByID = Minecraft.getInstance().level.getEntity(packet.entityId);
             CompoundTag data = PersistentData.get(entityByID);
-            new HashSet<>(data.getAllKeys()).forEach(data::remove);
+            new HashSet<>(data.keySet()).forEach(data::remove);
             data.merge(packet.readData);
             if (!data.getBooleanOr(TravelConstants.TRAVEL_TAG, false)) {
                 ClientTravelPathMover.stopMoving(packet.entityId);
             }
-            if (!(entityByID instanceof ISyncPersistentData))
-                return;
-            ((ISyncPersistentData) entityByID).onPersistentDataUpdated();
         } catch (Exception e) {
             HypertubeMod.LOGGER.error("Failed to handle SyncPersistentDataPacket for entity ID: {}", packet.entityId, e);
         }

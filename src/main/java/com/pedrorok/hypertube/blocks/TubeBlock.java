@@ -1,5 +1,8 @@
 package com.pedrorok.hypertube.blocks;
 
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.ScheduledTickAccess;
+import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import com.pedrorok.hypertube.core.connection.interfaces.ITubeConnection;
 import com.pedrorok.hypertube.core.connection.interfaces.ITubeConnectionEntity;
 import com.pedrorok.hypertube.registry.ModBlocks;
@@ -30,8 +33,6 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.level.BlockEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -88,11 +89,11 @@ public abstract class TubeBlock extends KineticBlock implements ITubeConnection,
 
     // ---- Waterlogging ----
     @Override
-    protected @NotNull BlockState updateShape(BlockState p_313906_, @NotNull Direction p_313739_, @NotNull BlockState p_313829_, @NotNull LevelAccessor p_313692_, @NotNull BlockPos p_313842_, @NotNull BlockPos p_313843_) {
-        if (p_313906_.getValue(WATERLOGGED)) {
-            p_313692_.scheduleTick(p_313842_, Fluids.WATER, Fluids.WATER.getTickDelay(p_313692_));
+    protected @NotNull BlockState updateShape(@NotNull BlockState state, @NotNull LevelReader level, @NotNull ScheduledTickAccess ticks, @NotNull BlockPos pos, @NotNull Direction direction, @NotNull BlockPos neighbourPos, @NotNull BlockState neighbourState, @NotNull RandomSource random) {
+        if (state.getValue(WATERLOGGED)) {
+            ticks.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
         }
-        return super.updateShape(p_313906_, p_313739_, p_313829_, p_313692_, p_313842_, p_313843_);
+        return super.updateShape(state, level, ticks, pos, direction, neighbourPos, neighbourState, random);
     }
 
     @Override
@@ -104,12 +105,7 @@ public abstract class TubeBlock extends KineticBlock implements ITubeConnection,
     public abstract Item getItem();
 
     @Override
-    public @NotNull ItemStack getCloneItemStack(@NotNull LevelReader level, @NotNull BlockPos pos, @NotNull BlockState state) {
-        return getItem().getDefaultInstance();
-    }
-
-    @Override
-    public @NotNull ItemStack getCloneItemStack(@NotNull BlockState state, @NotNull HitResult target, @NotNull LevelReader level, @NotNull BlockPos pos, @NotNull Player player) {
+    protected @NotNull ItemStack getCloneItemStack(@NotNull LevelReader level, @NotNull BlockPos pos, @NotNull BlockState state, boolean includeData) {
         return getItem().getDefaultInstance();
     }
 
@@ -160,9 +156,8 @@ public abstract class TubeBlock extends KineticBlock implements ITubeConnection,
 
         if (!(world instanceof ServerLevel)) return InteractionResult.SUCCESS;
 
-        BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(world, pos, world.getBlockState(pos), player);
-        NeoForge.EVENT_BUS.post(event);
-        if (event.isCanceled()) return InteractionResult.SUCCESS;
+        boolean allowed = PlayerBlockBreakEvents.BEFORE.invoker().beforeBlockBreak(world, player, pos, world.getBlockState(pos), world.getBlockEntity(pos));
+        if (!allowed) return InteractionResult.SUCCESS;
 
         world.destroyBlock(pos, false);
         IWrenchable.playRemoveSound(world, pos);

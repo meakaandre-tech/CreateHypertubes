@@ -5,6 +5,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -35,12 +36,12 @@ public class TravelConstants {
             TagKey.create(Registries.ENTITY_TYPE, HypertubeMod.of("traveller_entities"));
     public static class Client {
         public static final Map<EntityType<?>, TravellerEntity> ENTITIES_RENDER = new HashMap<>() {{
-            put(EntityType.PLAYER, TravellerEntity.ofBiped(-0.5f));
-            put(EntityType.VILLAGER, TravellerEntity.ofBiped(-0.8f));
-            put(EntityType.WANDERING_TRADER, TravellerEntity.ofBiped(-0.8f));
-            put(EntityType.SALMON, TravellerEntity.ofFish(0.9f));
-            put(EntityType.COD, TravellerEntity.ofFish(1f));
-            put(EntityType.TROPICAL_FISH, TravellerEntity.ofFish(1f));
+            put(EntityTypes.PLAYER, TravellerEntity.ofBiped(-0.5f));
+            put(EntityTypes.VILLAGER, TravellerEntity.ofBiped(-0.8f));
+            put(EntityTypes.WANDERING_TRADER, TravellerEntity.ofBiped(-0.8f));
+            put(EntityTypes.SALMON, TravellerEntity.ofFish(0.9f));
+            put(EntityTypes.COD, TravellerEntity.ofFish(1f));
+            put(EntityTypes.TROPICAL_FISH, TravellerEntity.ofFish(1f));
         }};
 
     }

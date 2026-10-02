@@ -1,5 +1,7 @@
 package com.pedrorok.hypertube.blocks.blockentities;
 
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 import com.pedrorok.hypertube.core.data.PersistentData;
 import com.pedrorok.hypertube.HypertubeMod;
 import com.pedrorok.hypertube.blocks.HyperEntranceBlock;
@@ -13,7 +15,8 @@ import com.pedrorok.hypertube.core.sound.TubeSoundManager;
 import com.pedrorok.hypertube.core.travel.TravelConstants;
 import com.pedrorok.hypertube.core.travel.TravelManager;
 import com.pedrorok.hypertube.utils.TubeUtils;
-import com.zurrtum.create.client.api.goggles.IHaveHoveringInformation;
+import com.pedrorok.hypertube.core.TubeGoggleInfo;
+import com.zurrtum.create.client.foundation.blockEntity.behaviour.tooltip.SpeedGaugeTooltipBehaviour;
 import com.zurrtum.create.content.kinetics.base.IRotate;
 import lombok.Getter;
 import net.minecraft.core.BlockPos;
@@ -36,7 +39,7 @@ import java.util.List;
  * @author Rok, Pedro Lucas nmm. Created on 21/04/2025
  * @project Create Hypertube
  */
-public class HyperEntranceBlockEntity extends ActionTubeBlockEntity implements IHaveHoveringInformation {
+public class HyperEntranceBlockEntity extends ActionTubeBlockEntity implements TubeGoggleInfo {
 
 
     @Getter
@@ -48,16 +51,19 @@ public class HyperEntranceBlockEntity extends ActionTubeBlockEntity implements I
 
     // --------- Nbt Methods ---------
     @Override
-    protected void read(CompoundTag compound, HolderLookup.Provider registries, boolean clientPacket) {
-        super.read(compound, registries, clientPacket);
+    protected void read(ValueInput view, boolean clientPacket) {
+        super.read(view, clientPacket);
+        CompoundTag compound = view.read("HypertubeConnections", CompoundTag.CODEC).orElseGet(CompoundTag::new);
         connection = compound.contains("Connection")
                 ? getConnectionRelative(compound, "Connection", worldPosition) : null;
     }
 
     @Override
-    protected void write(CompoundTag compound, HolderLookup.Provider registries, boolean clientPacket) {
-        super.write(compound, registries, clientPacket);
+    protected void write(ValueOutput view, boolean clientPacket) {
+        super.write(view, clientPacket);
+        CompoundTag compound = new CompoundTag();
         writeConnectionRelative(compound, worldPosition, new Tuple<>(connection, "Connection"));
+        view.store("HypertubeConnections", CompoundTag.CODEC, compound);
     }
     // --------- Nbt Methods ---------
 
@@ -123,9 +129,8 @@ public class HyperEntranceBlockEntity extends ActionTubeBlockEntity implements I
 
     @Override
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
-        super.addToGoggleTooltip(tooltip, isPlayerSneaking);
         float finalSpeed = Math.abs(this.getSpeed());
-        IRotate.SpeedLevel.getFormattedSpeedText(speed, finalSpeed < TravelConstants.NEEDED_SPEED).forGoggles(tooltip);
+        SpeedGaugeTooltipBehaviour.getFormattedSpeedText(speed, finalSpeed < TravelConstants.NEEDED_SPEED).forGoggles(tooltip);
 
         if (getBlockState().getValue(HyperEntranceBlock.IN_FRONT)) {
             tooltip.add(Component.literal("     ").append(Component.translatable("tooltip.create_hypertube.entrance_blocked").withColor(0xFF0000)));
@@ -207,7 +212,7 @@ public class HyperEntranceBlockEntity extends ActionTubeBlockEntity implements I
 
     // --------- Stress Methods ---------
     public float calculateStressApplied() {
-        float impact = (float) ServerConfig.get().STRESS_IMPACT_ENTRANCE.get();
+        float impact = ServerConfig.get().STRESS_IMPACT_ENTRANCE.get().floatValue();
         this.lastStressApplied = impact;
         return impact;
     }

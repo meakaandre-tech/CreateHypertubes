@@ -1,5 +1,7 @@
 package com.pedrorok.hypertube.blocks;
 
+import org.jetbrains.annotations.Nullable;
+import net.minecraft.world.level.redstone.Orientation;
 import com.pedrorok.hypertube.blocks.blockentities.parent.ActionTubeBlockEntity;
 import com.pedrorok.hypertube.core.smarttube.ITubeAttachment;
 import com.zurrtum.create.content.equipment.wrench.IWrenchable;
@@ -85,7 +87,6 @@ public abstract class ActionTubeBlock extends TubeBlock {
         return level.getSignal(pos.relative(side), side) > 0;
     }
 
-    @Override
     public boolean canConnectRedstone(BlockState state, BlockGetter world, BlockPos pos, Direction side) {
         ActionTubeBlockEntity tubeBlockEntity = (ActionTubeBlockEntity) world.getBlockEntity(pos);
         if (tubeBlockEntity == null) return false;
@@ -97,7 +98,7 @@ public abstract class ActionTubeBlock extends TubeBlock {
     }
 
     @Override
-    protected void neighborChanged(BlockState state, Level level, @NotNull BlockPos pos, @NotNull Block block, @NotNull BlockPos fromPos, boolean isMoving) {
+    protected void neighborChanged(BlockState state, Level level, @NotNull BlockPos pos, @NotNull Block block, @Nullable Orientation orientation, boolean isMoving) {
         ActionTubeBlockEntity tubeBlockEntity = (ActionTubeBlockEntity) level.getBlockEntity(pos);
         if (tubeBlockEntity == null) return;
         boolean neighborHasSignal = getSignalSide(level, pos, tubeBlockEntity.getAttachmentDirectionsNoEmit());

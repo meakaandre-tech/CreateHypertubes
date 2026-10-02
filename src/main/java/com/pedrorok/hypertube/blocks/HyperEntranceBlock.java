@@ -1,5 +1,6 @@
 package com.pedrorok.hypertube.blocks;
 
+import net.minecraft.world.level.redstone.Orientation;
 import com.pedrorok.hypertube.core.data.PersistentData;
 import com.pedrorok.hypertube.blocks.blockentities.parent.ActionTubeBlockEntity;
 import com.pedrorok.hypertube.blocks.blockentities.HyperEntranceBlockEntity;
@@ -111,9 +112,9 @@ public class HyperEntranceBlock extends ActionTubeBlock implements EntityBlock, 
     }
 
     @Override
-    public void onNeighborChange(BlockState state, LevelReader level, BlockPos pos, BlockPos neighbor) {
-        super.onNeighborChange(state, level, pos, neighbor);
-        updateInFrontProperty((Level) level, pos, state);
+    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, @Nullable Orientation orientation, boolean isMoving) {
+        super.neighborChanged(state, level, pos, block, orientation, isMoving);
+        updateInFrontProperty(level, pos, level.getBlockState(pos));
     }
 
     public void updateInFrontProperty(Level level, BlockPos pos, BlockState state) {

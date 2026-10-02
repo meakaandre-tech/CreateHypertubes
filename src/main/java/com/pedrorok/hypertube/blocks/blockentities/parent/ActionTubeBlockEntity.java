@@ -1,5 +1,7 @@
 package com.pedrorok.hypertube.blocks.blockentities.parent;
 
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 import com.mojang.serialization.Codec;
 import com.pedrorok.hypertube.HypertubeMod;
 import com.pedrorok.hypertube.core.connection.interfaces.ITubeActionPoint;
@@ -34,29 +36,32 @@ public abstract class ActionTubeBlockEntity extends TravelInteractTubeBlockEntit
 
     // --------- Smart Tube Methods ---------
     @Override
-    protected void write(CompoundTag compound, HolderLookup.Provider registries, boolean clientPacket) {
-        super.write(compound, registries, clientPacket);
+    protected void write(ValueOutput view, boolean clientPacket) {
+        super.write(view, clientPacket);
+        CompoundTag compound = new CompoundTag();
 
         if (smartTubeAttachments.isEmpty()) return;
         CompoundTag smartTubesTag = new CompoundTag();
         for (Map.Entry<Direction, ITubeAttachment> entry : smartTubeAttachments.entrySet()) {
-            smartTubesTag.put(entry.getKey().getSerializedName(), Codec.STRING.write(NbtOps.INSTANCE, entry.getValue().getId()));
+            smartTubesTag.putString(entry.getKey().getSerializedName(), entry.getValue().getId());
         }
         compound.put("attachments", smartTubesTag);
+        view.store("HypertubeAttachments", CompoundTag.CODEC, compound);
     }
 
     @Override
-    protected void read(CompoundTag compound, HolderLookup.Provider registries, boolean clientPacket) {
-        super.read(compound, registries, clientPacket);
+    protected void read(ValueInput view, boolean clientPacket) {
+        super.read(view, clientPacket);
+        CompoundTag compound = view.read("HypertubeAttachments", CompoundTag.CODEC).orElseGet(CompoundTag::new);
 
         smartTubeAttachments.clear();
 
-        if (!compound.contains("attachments", Tag.TAG_COMPOUND)) return;
+        if (!compound.contains("attachments")) return;
 
-        CompoundTag smartTubesTag = compound.getCompound("attachments");
+        CompoundTag smartTubesTag = compound.getCompoundOrEmpty("attachments");
         for (Direction direction : Direction.values()) {
             String directionKey = direction.getSerializedName();
-            if (!smartTubesTag.contains(directionKey, Tag.TAG_STRING)) continue;
+            if (!smartTubesTag.contains(directionKey)) continue;
 
             String smartTubeId = smartTubesTag.getStringOr(directionKey, "");
             ITubeAttachment smartTube = ITubeAttachment.get(smartTubeId);

@@ -1,5 +1,7 @@
 package com.pedrorok.hypertube.blocks.blockentities;
 
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 import com.pedrorok.hypertube.core.data.PersistentData;
 import com.pedrorok.hypertube.HypertubeMod;
 import com.pedrorok.hypertube.blocks.HyperJunctionBlock;
@@ -16,7 +18,7 @@ import com.pedrorok.hypertube.core.travel.TravelConstants;
 import com.pedrorok.hypertube.utils.JunctionDirectionUtils;
 import com.pedrorok.hypertube.utils.ModColors;
 import com.pedrorok.hypertube.utils.TubePulseRenderer;
-import com.zurrtum.create.client.api.goggles.IHaveHoveringInformation;
+import com.pedrorok.hypertube.core.TubeGoggleInfo;
 import lombok.Getter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -40,7 +42,7 @@ import java.util.UUID;
  * @author Rok, Pedro Lucas nmm. Created on 21/04/2025
  * @project Create Hypertube
  */
-public class HyperJunctionBlockEntity extends ActionTubeBlockEntity implements IHaveHoveringInformation {
+public class HyperJunctionBlockEntity extends ActionTubeBlockEntity implements TubeGoggleInfo {
 
     private final UUID tubeSoundId = UUID.randomUUID();
 
@@ -57,8 +59,9 @@ public class HyperJunctionBlockEntity extends ActionTubeBlockEntity implements I
 
     // --------- Nbt Methods ---------
     @Override
-    protected void read(CompoundTag compound, HolderLookup.Provider registries, boolean clientPacket) {
-        super.read(compound, registries, clientPacket);
+    protected void read(ValueInput view, boolean clientPacket) {
+        super.read(view, clientPacket);
+        CompoundTag compound = view.read("HypertubeConnections", CompoundTag.CODEC).orElseGet(CompoundTag::new);
         connectionOne = compound.contains("ConnectionOne")
                 ? getConnectionRelative(compound, "ConnectionOne", worldPosition) : null;
         connectionTwo = compound.contains("ConnectionTwo")
@@ -68,12 +71,14 @@ public class HyperJunctionBlockEntity extends ActionTubeBlockEntity implements I
     }
 
     @Override
-    protected void write(CompoundTag compound, HolderLookup.Provider registries, boolean clientPacket) {
-        super.write(compound, registries, clientPacket);
+    protected void write(ValueOutput view, boolean clientPacket) {
+        super.write(view, clientPacket);
+        CompoundTag compound = new CompoundTag();
         writeConnectionRelative(compound, worldPosition,
                 new Tuple<>(connectionOne, "ConnectionOne"),
                 new Tuple<>(connectionTwo, "ConnectionTwo"),
                 new Tuple<>(connectionThree, "ConnectionThree"));
+        view.store("HypertubeConnections", CompoundTag.CODEC, compound);
     }
     // --------- Nbt Methods ---------
 
@@ -121,7 +126,7 @@ public class HyperJunctionBlockEntity extends ActionTubeBlockEntity implements I
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null) return false;
         if (mc.player.tickCount % 10 != 0) return false;
-        if (mc.PersistentData.get(player).getBoolean(TravelConstants.TRAVEL_TAG)) return false;
+        if (PersistentData.get(mc.player).getBoolean(TravelConstants.TRAVEL_TAG)) return false;
 
         List<Direction> connectedFaces = JunctionDirectionUtils.getConnectedFaces(getBlockState(), null, (HyperJunctionBlock) getBlockState().getBlock());
         renderFromDirections(connectedFaces, 0.3f, ModColors.GREEN, 0.72f);
@@ -254,7 +259,7 @@ public class HyperJunctionBlockEntity extends ActionTubeBlockEntity implements I
 
     // --------- Stress Methods ---------
     public float calculateStressApplied() {
-        float impact = (float) ServerConfig.get().STRESS_IMPACT_ACCELERATOR.get();
+        float impact = ServerConfig.get().STRESS_IMPACT_ACCELERATOR.get().floatValue();
         this.lastStressApplied = impact;
         return impact;
     }

@@ -3,7 +3,6 @@ package com.pedrorok.hypertube.blocks;
 import com.pedrorok.hypertube.core.data.PersistentData;
 import com.pedrorok.hypertube.blocks.blockentities.parent.TravelInteractTubeBlockEntity;
 import com.pedrorok.hypertube.core.data.JunctionMode;
-import com.pedrorok.hypertube.core.data.JunctionModeProperty;
 import com.pedrorok.hypertube.core.travel.TravelConstants;
 import com.pedrorok.hypertube.registry.ModBlockEntities;
 import com.pedrorok.hypertube.registry.ModBlocks;
@@ -53,7 +52,7 @@ public class HyperJunctionBlock extends ActionTubeBlock implements EntityBlock {
     public static final EnumProperty<Direction> FACING = BlockStateProperties.FACING;
     public static final BooleanProperty OPEN = BlockStateProperties.OPEN;
     public static final BooleanProperty ACTIVE = BooleanProperty.create("active");
-    public static final JunctionModeProperty JUNCTION_MODE = JunctionModeProperty.create("junction_mode");
+    public static final EnumProperty<JunctionMode> JUNCTION_MODE = EnumProperty.create("junction_mode", JunctionMode.class);
 
 
     public HyperJunctionBlock(Properties properties) {

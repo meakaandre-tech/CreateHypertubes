@@ -6,11 +6,9 @@
   "mixins": [
     "BlockItemPlaceMixin",
     "EntityTravelingMixin",
-    "IPlayerExtensionMixin",
     "KineticBlockMixin",
     "LivingEntityDimensionsMixin",
     "LivingEntityTickMixin",
-    "PlayerMixin",
     "PlayerMovementMixin",
     "ServerGamePacketListenerImplMixin"
   ],

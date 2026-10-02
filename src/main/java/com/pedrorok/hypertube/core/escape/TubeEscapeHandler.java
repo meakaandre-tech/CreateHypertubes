@@ -73,7 +73,7 @@ public class TubeEscapeHandler {
 
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null) return;
-        if (!mc.PersistentData.get(player).getBoolean(TravelConstants.TRAVEL_TAG)) return;
+        if (!PersistentData.get(mc.player).getBoolean(TravelConstants.TRAVEL_TAG)) return;
 
         Component bar = makeProgressBar(Math.min(1f, ((progress * 8f / 7f) - 0.1f) * 1.1F));
 
