@@ -1,5 +1,6 @@
 package com.pedrorok.hypertube.core.placement;
 
+import com.pedrorok.hypertube.client.ClientHooks;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.pedrorok.hypertube.blocks.HypertubeBlock;
 import com.pedrorok.hypertube.core.connection.BezierConnection;
@@ -14,8 +15,6 @@ import com.pedrorok.hypertube.utils.RayCastUtils;
 import com.pedrorok.hypertube.utils.TubeUtils;
 import com.zurrtum.create.client.content.trains.track.TrackBlockOutline;
 import com.zurrtum.create.catnip.animation.LerpedFloat;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -49,9 +48,9 @@ public class TubePlacement {
             .startWithValue(0);
     @SuppressWarnings("D")
     public static void clientTick() {
-        LocalPlayer player = Minecraft.getInstance().player;
+        Player player = ClientHooks.player();
         ItemStack stack = player.getMainHandItem();
-        HitResult hitResult = Minecraft.getInstance().hitResult;
+        HitResult hitResult = ClientHooks.hitResult();
 
         if (hitResult == null)
             return;
@@ -236,15 +235,16 @@ public class TubePlacement {
         }
     }
     public static void drawCustomBlockSelection(PoseStack ms, SubmitNodeCollector queue, Vec3 camera, float lineWidth) {
-        Minecraft mc = Minecraft.getInstance();
-        if (mc.player == null || mc.level == null) return;
-        ItemStack mainHandItem = mc.player.getMainHandItem();
+        Player clientPlayer = ClientHooks.player();
+        Level clientLevel = ClientHooks.level();
+        if (clientPlayer == null || clientLevel == null) return;
+        ItemStack mainHandItem = clientPlayer.getMainHandItem();
         if (!mainHandItem.is(ModBlocks.HYPERTUBE.asItem())) return;
         if (!mainHandItem.hasFoil()) return;
         SimpleConnection connection = mainHandItem.get(ModDataComponent.TUBE_CONNECTING_FROM);
         if (connection == null) return;
 
-        BlockState blockState = mc.level.getBlockState(connection.pos());
+        BlockState blockState = clientLevel.getBlockState(connection.pos());
         if (!(blockState.getBlock() instanceof HypertubeBlock)) return;
         HypertubeBlock block = (HypertubeBlock) blockState.getBlock();
 

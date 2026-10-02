@@ -1,18 +1,18 @@
 package com.pedrorok.hypertube.blocks.blockentities.parent;
 
+import com.pedrorok.hypertube.client.ClientHooks;
 import com.pedrorok.hypertube.blocks.HyperEntranceBlock;
 import com.pedrorok.hypertube.config.ServerConfig;
 import com.pedrorok.hypertube.core.sound.TubeSoundManager;
 import com.pedrorok.hypertube.registry.ModParticles;
 import com.pedrorok.hypertube.registry.ModSounds;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -78,7 +78,7 @@ public abstract class TravelInteractTubeBlockEntity extends TubeBlockEntity {
 
         boolean isOpen = state.getValue(HyperEntranceBlock.OPEN);
 
-        LocalPlayer player = Minecraft.getInstance().player;
+        Player player = ClientHooks.player();
         Vec3 source = Vec3.atCenterOf(pos);
         Vec3 listener = player.position();
 

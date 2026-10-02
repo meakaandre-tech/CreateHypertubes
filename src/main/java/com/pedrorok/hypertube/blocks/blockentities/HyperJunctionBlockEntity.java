@@ -1,5 +1,8 @@
 package com.pedrorok.hypertube.blocks.blockentities;
 
+import com.pedrorok.hypertube.client.ClientHooks;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.level.storage.ValueInput;
 import com.pedrorok.hypertube.core.data.PersistentData;
@@ -20,7 +23,6 @@ import com.pedrorok.hypertube.utils.ModColors;
 import com.pedrorok.hypertube.utils.TubePulseRenderer;
 import com.pedrorok.hypertube.core.TubeGoggleInfo;
 import lombok.Getter;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -123,10 +125,10 @@ public class HyperJunctionBlockEntity extends ActionTubeBlockEntity implements T
 
     @Override
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
-        Minecraft mc = Minecraft.getInstance();
-        if (mc.player == null) return false;
-        if (mc.player.tickCount % 10 != 0) return false;
-        if (PersistentData.get(mc.player).getBooleanOr(TravelConstants.TRAVEL_TAG, false)) return false;
+        Player clientPlayer = ClientHooks.player();
+        if (clientPlayer == null) return false;
+        if (clientPlayer.tickCount % 10 != 0) return false;
+        if (PersistentData.get(clientPlayer).getBooleanOr(TravelConstants.TRAVEL_TAG, false)) return false;
 
         List<Direction> connectedFaces = JunctionDirectionUtils.getConnectedFaces(getBlockState(), null, (HyperJunctionBlock) getBlockState().getBlock());
         renderFromDirections(connectedFaces, 0.3f, ModColors.GREEN, 0.72f);
@@ -134,7 +136,7 @@ public class HyperJunctionBlockEntity extends ActionTubeBlockEntity implements T
             List<Direction> fromCenterDirection = JunctionDirectionUtils.getConnectedFaces(getBlockState(), getBlockState().getValue(HyperJunctionBlock.FACING), (HyperJunctionBlock) getBlockState().getBlock());
             IConnection connectionInDirection = getConnectionInDirection(getBlockState().getValue(HyperJunctionBlock.FACING));
             if (connectionInDirection != null) {
-                BezierConnection thisEntranceConnection = connectionInDirection.getThisEntranceConnection(mc.level);
+                BezierConnection thisEntranceConnection = connectionInDirection.getThisEntranceConnection(ClientHooks.level());
                 if (thisEntranceConnection != null) {
                     boolean inverted = thisEntranceConnection.isInverted(getBlockPos());
                     BlockPos pos = thisEntranceConnection.getFromPos().pos();
@@ -147,11 +149,11 @@ public class HyperJunctionBlockEntity extends ActionTubeBlockEntity implements T
         return false;
     }
     private void renderFromDirections(List<Direction> directions, float speed, int color, float radius) {
-        Minecraft mc = Minecraft.getInstance();
+        Level clientLevel = ClientHooks.level();
         for (Direction direction : directions) {
             IConnection iConnection = getConnectionInDirection(direction);
             if (iConnection == null) continue;
-            BezierConnection connection = iConnection.getThisEntranceConnection(mc.level);
+            BezierConnection connection = iConnection.getThisEntranceConnection(clientLevel);
             if (connection == null) continue;
             boolean inverted = connection.isInverted(getBlockPos());
             BlockPos pos = connection.getFromPos().pos();

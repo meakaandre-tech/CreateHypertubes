@@ -1,7 +1,7 @@
 package com.pedrorok.hypertube.network.packets;
 
+import com.pedrorok.hypertube.client.ClientHooks;
 import com.pedrorok.hypertube.HypertubeMod;
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -56,8 +56,8 @@ public record EntityTravelDirDataPacket(int entityId, float yaw, float pitch) im
         });
     }
     private static void handleClient(EntityTravelDirDataPacket packet) {
-        if (Minecraft.getInstance().player.getId() == packet.entityId) return;
-        Entity entity = Minecraft.getInstance().level.getEntity(packet.entityId);
+        if (ClientHooks.player().getId() == packet.entityId) return;
+        Entity entity = ClientHooks.entity(packet.entityId);
         if (entity == null) return;
         if (!entity.isAlive()) return;
         entity.setYRot(packet.yaw);

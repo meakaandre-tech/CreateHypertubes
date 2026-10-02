@@ -1,10 +1,10 @@
 package com.pedrorok.hypertube.network.packets;
 
+import com.pedrorok.hypertube.client.ClientHooks;
 import com.pedrorok.hypertube.core.data.PersistentData;
 import com.pedrorok.hypertube.HypertubeMod;
 import com.pedrorok.hypertube.core.travel.TravelConstants;
 import com.pedrorok.hypertube.core.travel.client.ClientTravelPathMover;
-import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
@@ -61,7 +61,7 @@ public record SyncPersistentDataPacket(int entityId, CompoundTag readData) imple
 
     private static void handleClient(SyncPersistentDataPacket packet) {
         try {
-            Entity entityByID = Minecraft.getInstance().level.getEntity(packet.entityId);
+            Entity entityByID = ClientHooks.entity(packet.entityId);
             CompoundTag data = PersistentData.get(entityByID);
             new HashSet<>(data.keySet()).forEach(data::remove);
             data.merge(packet.readData);

@@ -1,5 +1,6 @@
 package com.pedrorok.hypertube.core.travel;
 
+import com.pedrorok.hypertube.client.ClientHooks;
 import com.pedrorok.hypertube.core.data.PersistentData;
 import com.mojang.datafixers.util.Pair;
 import com.pedrorok.hypertube.HypertubeMod;
@@ -13,7 +14,6 @@ import com.pedrorok.hypertube.network.packets.SyncPersistentDataPacket;
 import com.pedrorok.hypertube.utils.JunctionDirectionUtils;
 import com.pedrorok.hypertube.utils.MessageUtils;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -125,9 +125,9 @@ public class TravelManager {
         }
     }
     private static void clientTick(Player player) {
-        Minecraft mc = Minecraft.getInstance();
-        if (mc.player == null) return;
-        if (!mc.player.is(player)) return;
+        Player clientPlayer = ClientHooks.player();
+        if (clientPlayer == null) return;
+        if (!clientPlayer.is(player)) return;
         if (hasHyperTubeData(player)) {
             TubeSoundManager.TravelSound.enableClientPlayerSound(player, 0.8F, 1.0F);
         }
