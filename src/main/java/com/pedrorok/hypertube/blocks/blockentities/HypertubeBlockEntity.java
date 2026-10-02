@@ -40,7 +40,7 @@ public class HypertubeBlockEntity extends TubeBlockEntity {
     @Override
     protected void read(ValueInput view, boolean clientPacket) {
         super.read(view, clientPacket);
-        CompoundTag compound = view.read("HypertubeConnections", CompoundTag.CODEC).orElseGet(CompoundTag::new);
+        CompoundTag compound = readConnectionData(view, "ConnectionTo", "ConnectionFrom");
         this.connectionOne = compound.contains("ConnectionTo")
                 ? getConnectionRelative(compound, "ConnectionTo", worldPosition) : null;
         this.connectionTwo = compound.contains("ConnectionFrom")

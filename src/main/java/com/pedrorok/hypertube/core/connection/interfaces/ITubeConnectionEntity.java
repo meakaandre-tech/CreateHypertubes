@@ -11,11 +11,13 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import com.pedrorok.hypertube.utils.Tuple;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Rok, Pedro Lucas nmm. Created on 24/06/2025
@@ -48,6 +50,22 @@ public interface ITubeConnectionEntity {
             tag.put(key, BezierConnection.CODEC.encodeStart(NbtOps.INSTANCE, (BezierConnection) connection)
                     .getOrThrow());
         }
+    }
+
+    /**
+     * The connection data of a block entity: the "HypertubeConnections" compound this port writes, or, when that is
+     * absent, the keys as the 1.21.1 mod stored them at the top level of the block entity tag (structure files such
+     * as the ponder scenes still have that layout).
+     */
+    default CompoundTag readConnectionData(ValueInput view, String... keys) {
+        Optional<CompoundTag> stored = view.read("HypertubeConnections", CompoundTag.CODEC);
+        if (stored.isPresent()) return stored.get();
+        CompoundTag legacy = new CompoundTag();
+        for (String key : keys) {
+            view.read(key, CompoundTag.CODEC).ifPresent(tag -> legacy.put(key, tag));
+            view.getInt(key + "_version").ifPresent(version -> legacy.putInt(key + "_version", version));
+        }
+        return legacy;
     }
 
     default IConnection getConnectionRelative(CompoundTag tag, String key, BlockPos referencePos) {

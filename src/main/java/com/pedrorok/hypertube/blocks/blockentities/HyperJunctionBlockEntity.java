@@ -63,7 +63,7 @@ public class HyperJunctionBlockEntity extends ActionTubeBlockEntity implements T
     @Override
     protected void read(ValueInput view, boolean clientPacket) {
         super.read(view, clientPacket);
-        CompoundTag compound = view.read("HypertubeConnections", CompoundTag.CODEC).orElseGet(CompoundTag::new);
+        CompoundTag compound = readConnectionData(view, "ConnectionOne", "ConnectionTwo", "ConnectionThree");
         connectionOne = compound.contains("ConnectionOne")
                 ? getConnectionRelative(compound, "ConnectionOne", worldPosition) : null;
         connectionTwo = compound.contains("ConnectionTwo")
