@@ -7,7 +7,7 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
-import net.neoforged.neoforge.network.handling.IPayloadContext;
+import com.pedrorok.hypertube.network.PayloadContext;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -50,7 +50,7 @@ public record EntityTravelDirDataPacket(int entityId, float yaw, float pitch) im
         );
     }
 
-    public static void handle(EntityTravelDirDataPacket packet, IPayloadContext context) {
+    public static void handle(EntityTravelDirDataPacket packet, PayloadContext context) {
         context.enqueueWork(() -> {
             handleClient(packet);
         });

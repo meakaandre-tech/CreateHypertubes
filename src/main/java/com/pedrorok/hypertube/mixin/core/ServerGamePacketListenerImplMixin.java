@@ -1,5 +1,6 @@
 package com.pedrorok.hypertube.mixin.core;
 
+import com.pedrorok.hypertube.core.data.PersistentData;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.pedrorok.hypertube.core.travel.TravelConstants;
@@ -25,7 +26,7 @@ public class ServerGamePacketListenerImplMixin {
             )
     )
     private boolean redirectIsChangingDimension(ServerPlayer player, Operation<Boolean> original) {
-        if (player.getPersistentData().getBoolean(TravelConstants.TRAVEL_TAG)) return true;
+        if (PersistentData.get(player).getBoolean(TravelConstants.TRAVEL_TAG)) return true;
         return original.call(player);
     }
 }

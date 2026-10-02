@@ -8,7 +8,7 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.network.codec.NeoForgeStreamCodecs;
-import net.neoforged.neoforge.network.handling.IPayloadContext;
+import com.pedrorok.hypertube.network.PayloadContext;
 import org.jetbrains.annotations.NotNull;
 
 public record MoveDirectionPacket(MoveDirection direction) implements CustomPacketPayload {
@@ -27,7 +27,7 @@ public record MoveDirectionPacket(MoveDirection direction) implements CustomPack
         return TYPE;
     }
 
-    public static void handle(MoveDirectionPacket packet, IPayloadContext context) {
+    public static void handle(MoveDirectionPacket packet, PayloadContext context) {
         context.enqueueWork(() -> {
             Player player = context.player();
             TravelManager.changeDirection(packet.direction(), player.getUUID(), player.level());

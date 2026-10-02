@@ -3,10 +3,9 @@ package com.pedrorok.hypertube.registry;
 import com.pedrorok.hypertube.HypertubeMod;
 import com.pedrorok.hypertube.core.connection.BezierConnection;
 import com.pedrorok.hypertube.core.connection.SimpleConnection;
+import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
-import net.minecraft.core.registries.Registries;
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.neoforge.registries.DeferredRegister;
+import net.minecraft.core.registries.BuiltInRegistries;
 
 import java.util.function.UnaryOperator;
 
@@ -15,8 +14,6 @@ import java.util.function.UnaryOperator;
  * @project Create Hypertube
  */
 public class ModDataComponent {
-
-    private static final DeferredRegister.DataComponents DATA_COMPONENTS = DeferredRegister.createDataComponents(Registries.DATA_COMPONENT_TYPE, HypertubeMod.MOD_ID);
 
     public static final DataComponentType<SimpleConnection> TUBE_CONNECTING_FROM = register(
             "tube_connecting_from",
@@ -29,12 +26,13 @@ public class ModDataComponent {
     );
 
     private static <T> DataComponentType<T> register(String name, UnaryOperator<DataComponentType.Builder<T>> builder) {
-        DataComponentType<T> type = builder.apply(DataComponentType.builder()).build();
-        DATA_COMPONENTS.register(name, () -> type);
-        return type;
+        return Registry.register(
+                BuiltInRegistries.DATA_COMPONENT_TYPE,
+                HypertubeMod.of(name),
+                builder.apply(DataComponentType.builder()).build()
+        );
     }
 
-    public static void register(IEventBus eventBus) {
-        DATA_COMPONENTS.register(eventBus);
+    public static void register() {
     }
 }

@@ -20,7 +20,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.network.PacketDistributor;
+import com.pedrorok.hypertube.network.ClientNetworkHandler;
+import com.pedrorok.hypertube.network.NetworkHandler;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -172,7 +173,7 @@ public class TravelPathMover {
                 player.stopFallFlying();
             return;
         }
-        PacketDistributor.sendToPlayersTrackingEntity(entity, SyncEntityPosPacket.create(entity, currentSegment));
+        NetworkHandler.sendToPlayersTrackingEntity(entity, SyncEntityPosPacket.create(entity, currentSegment));
     }
 
     public void handleActionPoint(BlockPos actionPos) {
@@ -194,7 +195,7 @@ public class TravelPathMover {
         entity.setYRot(yaw);
         entity.setXRot(pitch);
         if (entity.level().isClientSide) return;
-        PacketDistributor.sendToPlayersTrackingEntity(entity, EntityTravelDirDataPacket.create(entity));
+        NetworkHandler.sendToPlayersTrackingEntity(entity, EntityTravelDirDataPacket.create(entity));
     }
 
     public Vec3 getLastDir() {

@@ -1,5 +1,6 @@
 package com.pedrorok.hypertube.blocks;
 
+import com.pedrorok.hypertube.core.data.PersistentData;
 import com.pedrorok.hypertube.blocks.blockentities.parent.ActionTubeBlockEntity;
 import com.pedrorok.hypertube.blocks.blockentities.HyperAcceleratorBlockEntity;
 import com.pedrorok.hypertube.core.connection.interfaces.ITubeActionPoint;
@@ -41,7 +42,8 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.EntityCollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.neoforged.neoforge.network.PacketDistributor;
+import com.pedrorok.hypertube.network.ClientNetworkHandler;
+import com.pedrorok.hypertube.network.NetworkHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -177,7 +179,7 @@ public class HyperAcceleratorBlock extends ActionTubeBlock implements EntityBloc
         float newSpeed = mover.getTravelSpeed() + speed * (tube.getBlockState().getValue(ACCELERATE) ? 1 : -1);
         newSpeed = Math.max(0.4333f, newSpeed);
         mover.setTravelSpeed(newSpeed);
-        PacketDistributor.sendToPlayersTrackingEntityAndSelf(entity, new SpeedChangePacket(entity.getId(), newSpeed));
+        NetworkHandler.sendToPlayersTrackingEntityAndSelf(entity, new SpeedChangePacket(entity.getId(), newSpeed));
         TubeSoundManager.playTubeSuctionSound(entity, entity.position(), 0.5f, Math.min(1.6f, newSpeed));
     }
 
@@ -186,7 +188,7 @@ public class HyperAcceleratorBlock extends ActionTubeBlock implements EntityBloc
     public VoxelShape getShape(BlockState state, @Nullable CollisionContext ctx) {
         if (ctx instanceof EntityCollisionContext ecc
             && ecc.getEntity() != null
-            && ecc.getEntity().getPersistentData().getBoolean(TravelConstants.TRAVEL_TAG)) {
+            && PersistentData.get(ecc.getEntity()).getBoolean(TravelConstants.TRAVEL_TAG)) {
             return VoxelUtils.empty();
         }
         return Shapes.block();

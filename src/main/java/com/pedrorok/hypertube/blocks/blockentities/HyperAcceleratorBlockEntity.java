@@ -1,5 +1,6 @@
 package com.pedrorok.hypertube.blocks.blockentities;
 
+import com.pedrorok.hypertube.core.data.PersistentData;
 import com.pedrorok.hypertube.HypertubeMod;
 import com.pedrorok.hypertube.blocks.HyperAcceleratorBlock;
 import com.pedrorok.hypertube.blocks.HypertubeBlock;
@@ -89,7 +90,7 @@ public class HyperAcceleratorBlockEntity extends ActionTubeBlockEntity implement
 
         LivingEntity nearbyEntity = getNearbyLivingEntities((ServerLevel) level, pos.getCenter());
 
-        boolean canOpen = nearbyEntity != null && nearbyEntity.getPersistentData().getBoolean(TravelConstants.TRAVEL_TAG);
+        boolean canOpen = nearbyEntity != null && PersistentData.get(nearbyEntity).getBoolean(TravelConstants.TRAVEL_TAG);
 
         isTubeClosed(canOpen, isOpen);
     }

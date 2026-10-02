@@ -1,132 +1,35 @@
 package com.pedrorok.hypertube.events;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.pedrorok.hypertube.client.TubePathOutline;
-import com.pedrorok.hypertube.core.camera.CameraSmoothing;
-import com.pedrorok.hypertube.core.camera.DetachedCameraController;
-import com.pedrorok.hypertube.core.camera.DetachedPlayerDirController;
 import com.pedrorok.hypertube.core.escape.TubeEscapeHandler;
 import com.pedrorok.hypertube.core.placement.TubePlacement;
 import com.pedrorok.hypertube.core.sound.TubeSoundManager;
-import com.pedrorok.hypertube.core.travel.TravelConstants;
-import com.pedrorok.hypertube.core.travel.TravellerEntity;
 import com.pedrorok.hypertube.core.travel.client.ClientTravelPathMover;
-import com.pedrorok.hypertube.core.travel.client.ClientTravelPathRender;
-import com.pedrorok.hypertube.utils.TubePulseRenderer;
-import com.zurrtum.create.client.catnip.animation.AnimationTickHolder;
-import com.zurrtum.create.client.catnip.placement.PlacementClient;
-import net.createmod.catnip.render.DefaultSuperRenderTypeBuffer;
-import net.createmod.catnip.render.SuperRenderTypeBuffer;
-import net.minecraft.client.DeltaTracker;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.Minecraft;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.phys.Vec3;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.client.event.*;
-import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 
 /**
  * @author Rok, Pedro Lucas nmm. Created on 23/04/2025
  * @project Create Hypertube
  */
-@EventBusSubscriber(Dist.CLIENT)
 public class ClientEvents {
 
-    private static long lastFrameTime = 0;
-
-    @SubscribeEvent
-    public static void onTickPre(ClientTickEvent.Pre event) {
-        onTick(true);
-    }
-
-    @SubscribeEvent
-    public static void onTickPost(ClientTickEvent.Post event) {
-        onTick(false);
-    }
-
-    @SubscribeEvent
-    public static void onRenderHighlight(RenderHighlightEvent.Block event) {
-        TubePathOutline.renderTubeOutline(event);
+    public static void register() {
+        ClientTickEvents.START_CLIENT_TICK.register(client -> onTick(true));
+        ClientTickEvents.END_CLIENT_TICK.register(client -> onTick(false));
     }
 
     private static void onTick(boolean isPreEvent) {
         if (!isGameActive()) return;
-
         if (isPreEvent) {
             TubeSoundManager.tickClientPlayerSounds();
             TubeEscapeHandler.onClientTick();
             return;
         }
         TubePlacement.clientTick();
-        DetachedCameraController.tickCamera();
         ClientTravelPathMover.onClientTick();
-    }
-
-    @SubscribeEvent
-    public static void renderFrame(RenderFrameEvent.Pre event) {
-        DeltaTracker partialTick = event.getPartialTick();
-
-        long currentTime = System.nanoTime();
-        float deltaSeconds = lastFrameTime == 0 ? 1 / CameraSmoothing.REFERENCE_RATE : (currentTime - lastFrameTime) / 1_000_000_000f;
-        lastFrameTime = currentTime;
-
-        DetachedPlayerDirController.tickPlayer(deltaSeconds);
-
-        ClientTravelPathMover.onRenderTick(partialTick);
-    }
-
-    @SubscribeEvent
-    public static void afterRenderOverlayLayer(RenderGuiLayerEvent.Post event) {
-        if (event.getName() == VanillaGuiLayers.CROSSHAIR) {
-            ClientTravelPathRender.renderOverlay(event.getGuiGraphics(), AnimationTickHolder.getPartialTicksUI());
-        }
-        if (event.getName() == VanillaGuiLayers.HOTBAR) {
-            TubeEscapeHandler.onRenderGuiOverlay(event.getGuiGraphics(), event.getPartialTick());
-        }
-    }
-
-    @SubscribeEvent
-    public static void onRenderWorld(RenderLevelStageEvent event) {
-        if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_PARTICLES) {
-            PoseStack ms = event.getPoseStack();
-            ms.pushPose();
-            SuperRenderTypeBuffer buffer = DefaultSuperRenderTypeBuffer.getInstance();
-            Vec3 camera = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
-
-            TubePlacement.drawCustomBlockSelection(ms, buffer, camera);
-
-            buffer.draw();
-            RenderSystem.enableCull();
-            ms.popPose();
-        }
-        if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_TRANSLUCENT_BLOCKS) {
-            TubePulseRenderer.onRenderLevelStage(event.getPoseStack(), event.getPartialTick(), event.getCamera());
-        }
     }
 
     protected static boolean isGameActive() {
         return !(Minecraft.getInstance().level == null || Minecraft.getInstance().player == null);
-    }
-
-    @SubscribeEvent
-    public static void onRenderEntity(RenderLivingEvent.Pre event) {
-        LivingEntity entity = event.getEntity();
-        if (!entity.getPersistentData().getBoolean(TravelConstants.TRAVEL_TAG)) return;
-        PoseStack poseStack = event.getPoseStack();
-        TravellerEntity travellerEntity = TravelConstants.Client.ENTITIES_RENDER
-                .get(entity.getType());
-        if (travellerEntity == null) travellerEntity = TravellerEntity.ofAny(0.5f);
-        travellerEntity
-                .renderEntityOnTube()
-                .accept(entity, poseStack);
-    }
-
-    @SubscribeEvent
-    public static void onRenderEntityPost(RenderLivingEvent.Post event) {
-        LivingEntity entity = event.getEntity();
-        if (!entity.getPersistentData().getBoolean(TravelConstants.TRAVEL_TAG)) return;
-        event.getPoseStack().popPose();
     }
 }

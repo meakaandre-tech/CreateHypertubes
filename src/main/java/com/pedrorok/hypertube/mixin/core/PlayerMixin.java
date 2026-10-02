@@ -1,5 +1,6 @@
 package com.pedrorok.hypertube.mixin.core;
 
+import com.pedrorok.hypertube.core.data.PersistentData;
 import com.pedrorok.hypertube.core.camera.DetachedPlayerDirController;
 import com.pedrorok.hypertube.core.travel.TravelConstants;
 import net.minecraft.client.Minecraft;
@@ -22,7 +23,7 @@ public class PlayerMixin {
     private void createHypertube$onTick(CallbackInfo ci) {
         LivingEntity entity = (LivingEntity) (Object) this;
 
-        if (!entity.getPersistentData().getBoolean(TravelConstants.TRAVEL_TAG)) return;
+        if (!PersistentData.get(entity).getBoolean(TravelConstants.TRAVEL_TAG)) return;
 
         if (!(entity instanceof Player player) || !entity.level().isClientSide) return;
         createHypertube$tickInClient(player);

@@ -7,7 +7,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.Identifier;
-import net.neoforged.neoforge.network.handling.IPayloadContext;
+import com.pedrorok.hypertube.network.PayloadContext;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
@@ -34,7 +34,7 @@ public record FinishPathPacket(UUID entityUuid) implements CustomPacketPayload {
         return new FinishPathPacket(buf.readUUID());
     }
 
-    public static void handle(FinishPathPacket packet, IPayloadContext ctx) {
+    public static void handle(FinishPathPacket packet, PayloadContext ctx) {
         ctx.enqueueWork(() -> {
             TravelManager.finishTravel(packet.entityUuid);
         });

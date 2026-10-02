@@ -2,45 +2,47 @@ package com.pedrorok.hypertube.registry;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import com.pedrorok.hypertube.HypertubeMod;
+import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import org.lwjgl.glfw.GLFW;
 
-@EventBusSubscriber(modid = HypertubeMod.MOD_ID, value = Dist.CLIENT)
+/**
+ * @author Rok, Pedro Lucas nmm. Created on 28/07/2025
+ * @project Create Hypertube
+ */
 public enum ModKeybinds {
 
-	ESCAPE("tube_escape", GLFW.GLFW_KEY_LEFT_SHIFT);
+    ESCAPE("tube_escape", GLFW.GLFW_KEY_LEFT_SHIFT);
 
-	public static final String CATEGORY = "key.categories.hypertube";
+    public static final KeyMapping.Category CATEGORY = new KeyMapping.Category(HypertubeMod.of("hypertube"));
 
-	private final KeyMapping mapping;
+    private final String description;
+    private final int defaultKey;
+    private KeyMapping mapping;
 
-	ModKeybinds(String description, int defaultKey) {
-		this.mapping = new KeyMapping("key.hypertube." + description, defaultKey, CATEGORY);;
-	}
+    ModKeybinds(String description, int defaultKey) {
+        this.description = description;
+        this.defaultKey = defaultKey;
+    }
 
-	public boolean isDown() {
-		return !this.mapping.isUnbound() && isKeyPressed();
-	}
+    public boolean isDown() {
+        return mapping != null && !mapping.isUnbound() && isKeyPressed();
+    }
 
-	private boolean isKeyPressed() {
-		int keyCode = mapping.getKey().getValue();
-		long window = Minecraft.getInstance().getWindow().getWindow();
-		return InputConstants.isKeyDown(window, keyCode) && mapping.isConflictContextAndModifierActive();
-	}
+    private boolean isKeyPressed() {
+        int keyCode = KeyMappingHelper.getBoundKeyOf(mapping).getValue();
+        return InputConstants.isKeyDown(Minecraft.getInstance().getWindow(), keyCode);
+    }
 
-	public Component message() {
-		return this.mapping.getTranslatedKeyMessage();
-	}
+    public Component message() {
+        return mapping.getTranslatedKeyMessage();
+    }
 
-	@SubscribeEvent
-	public static void register(RegisterKeyMappingsEvent event) {
-		for (ModKeybinds key : values()) {
-			event.register(key.mapping);
-		}
-	}
+    public static void register() {
+        for (ModKeybinds key : values()) {
+            key.mapping = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.hypertube." + key.description, key.defaultKey, CATEGORY));
+        }
+    }
 }

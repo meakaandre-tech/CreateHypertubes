@@ -9,7 +9,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.network.handling.IPayloadContext;
+import com.pedrorok.hypertube.network.PayloadContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -76,7 +76,7 @@ public record MovePathPacket(int entityId, List<Vec3> pathPoints, Set<BlockPos> 
         return new MovePathPacket(id, points, actionPoints, speed, isJunctionEnd, junctionDirection);
     }
 
-    public static void handle(MovePathPacket packet, IPayloadContext ctx) {
+    public static void handle(MovePathPacket packet, PayloadContext ctx) {
         ctx.enqueueWork(() -> {
             ClientTravelPathMover.startMoving(packet);
         });

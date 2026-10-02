@@ -1,5 +1,6 @@
 package com.pedrorok.hypertube.blocks;
 
+import com.pedrorok.hypertube.core.data.PersistentData;
 import com.pedrorok.hypertube.blocks.blockentities.TubePathBlockEntity;
 import com.pedrorok.hypertube.core.collision.TubeFiller;
 import com.pedrorok.hypertube.core.connection.BezierConnection;
@@ -62,7 +63,7 @@ public class TubePathBlock extends Block implements EntityBlock, SimpleWaterlogg
     protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         if (context instanceof EntityCollisionContext ecc
                 && ecc.getEntity() != null
-                && ecc.getEntity().getPersistentData().getBoolean(TravelConstants.TRAVEL_TAG)) {
+                && PersistentData.get(ecc.getEntity()).getBoolean(TravelConstants.TRAVEL_TAG)) {
             return VoxelUtils.empty();
         }
         return level.getBlockEntity(pos) instanceof TubePathBlockEntity filler ? filler.shape() : VoxelUtils.empty();

@@ -1,5 +1,6 @@
 package com.pedrorok.hypertube.mixin.core;
 
+import com.pedrorok.hypertube.core.data.PersistentData;
 import com.pedrorok.hypertube.core.travel.TravelConstants;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -17,28 +18,28 @@ public class EntityTravelingMixin {
     @Inject(method = "getGravity", at = @At("HEAD"), cancellable = true)
     private void createHypertube$cancelLerpMotion(CallbackInfoReturnable<Double> cir) {
         if (!(((Entity) (Object) this) instanceof LivingEntity entity)
-            || !entity.getPersistentData().getBoolean(TravelConstants.TRAVEL_TAG)) return;
+            || !PersistentData.get(entity).getBoolean(TravelConstants.TRAVEL_TAG)) return;
         cir.setReturnValue(0.0D);
     }
 
     @Inject(method = "getPose", at = @At("HEAD"), cancellable = true)
     private void createHypertube$cancelPose(CallbackInfoReturnable<Pose> cir) {
         if (!(((Entity) (Object) this) instanceof LivingEntity player)
-            || !player.getPersistentData().getBoolean(TravelConstants.TRAVEL_TAG)) return;
+            || !PersistentData.get(player).getBoolean(TravelConstants.TRAVEL_TAG)) return;
         cir.setReturnValue(Pose.STANDING);
     }
 
     @Inject(method = "hurt", at = @At("HEAD"), cancellable = true)
     private void createHypertube$cancelHurt(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
         if (!(((Entity) (Object) this) instanceof LivingEntity entity)
-            || !entity.getPersistentData().getBoolean(TravelConstants.TRAVEL_TAG)) return;
+            || !PersistentData.get(entity).getBoolean(TravelConstants.TRAVEL_TAG)) return;
         cir.setReturnValue(false);
     }
 
     @Inject(method = "isInvulnerableTo", at = @At("HEAD"), cancellable = true)
     private void createHypertube$cancelInvulnerableTo(DamageSource source, CallbackInfoReturnable<Boolean> cir) {
         if (!(((Entity) (Object) this) instanceof LivingEntity entity)
-            || !entity.getPersistentData().getBoolean(TravelConstants.TRAVEL_TAG)) return;
+            || !PersistentData.get(entity).getBoolean(TravelConstants.TRAVEL_TAG)) return;
         cir.setReturnValue(true);
     }
 }

@@ -1,5 +1,6 @@
 package com.pedrorok.hypertube.blocks.blockentities;
 
+import com.pedrorok.hypertube.core.data.PersistentData;
 import com.pedrorok.hypertube.HypertubeMod;
 import com.pedrorok.hypertube.blocks.HyperJunctionBlock;
 import com.pedrorok.hypertube.blocks.HypertubeBlock;
@@ -101,7 +102,7 @@ public class HyperJunctionBlockEntity extends ActionTubeBlockEntity implements I
 
         LivingEntity nearbyEntity = getNearbyLivingEntities((ServerLevel) level, pos.getCenter());
 
-        boolean canOpen = nearbyEntity != null && nearbyEntity.getPersistentData().getBoolean(TravelConstants.TRAVEL_TAG);
+        boolean canOpen = nearbyEntity != null && PersistentData.get(nearbyEntity).getBoolean(TravelConstants.TRAVEL_TAG);
 
         isTubeClosed(canOpen, isOpen);
     }
@@ -120,7 +121,7 @@ public class HyperJunctionBlockEntity extends ActionTubeBlockEntity implements I
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null) return false;
         if (mc.player.tickCount % 10 != 0) return false;
-        if (mc.player.getPersistentData().getBoolean(TravelConstants.TRAVEL_TAG)) return false;
+        if (mc.PersistentData.get(player).getBoolean(TravelConstants.TRAVEL_TAG)) return false;
 
         List<Direction> connectedFaces = JunctionDirectionUtils.getConnectedFaces(getBlockState(), null, (HyperJunctionBlock) getBlockState().getBlock());
         renderFromDirections(connectedFaces, 0.3f, ModColors.GREEN, 0.72f);

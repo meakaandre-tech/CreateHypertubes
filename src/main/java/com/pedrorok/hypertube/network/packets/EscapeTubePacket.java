@@ -7,7 +7,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
-import net.neoforged.neoforge.network.handling.IPayloadContext;
+import com.pedrorok.hypertube.network.PayloadContext;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -31,7 +31,7 @@ public record EscapeTubePacket() implements CustomPacketPayload {
         return new EscapeTubePacket();
     }
 
-    public static void handle(EscapeTubePacket packet, IPayloadContext ctx) {
+    public static void handle(EscapeTubePacket packet, PayloadContext ctx) {
         ctx.enqueueWork(() -> {
             TravelManager.finishTravel((ServerPlayer) ctx.player());
         });

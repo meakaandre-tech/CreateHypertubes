@@ -1,5 +1,6 @@
 package com.pedrorok.hypertube.mixin.core;
 
+import com.pedrorok.hypertube.core.data.PersistentData;
 import com.pedrorok.hypertube.core.travel.TravelConstants;
 import com.pedrorok.hypertube.utils.VoxelUtils;
 import com.zurrtum.create.content.kinetics.base.KineticBlock;
@@ -27,7 +28,7 @@ public abstract class KineticBlockMixin {
         if (state.getBlock() instanceof KineticBlock
                 && context instanceof EntityCollisionContext ecc
                 && ecc.getEntity() != null
-                && ecc.getEntity().getPersistentData().getBoolean(TravelConstants.TRAVEL_TAG)) {
+                && PersistentData.get(ecc.getEntity()).getBoolean(TravelConstants.TRAVEL_TAG)) {
             cir.setReturnValue(VoxelUtils.empty());
         }
     }

@@ -1,5 +1,6 @@
 package com.pedrorok.hypertube.core.travel;
 
+import com.pedrorok.hypertube.core.data.PersistentData;
 import com.mojang.datafixers.util.Pair;
 import com.pedrorok.hypertube.HypertubeMod;
 import com.pedrorok.hypertube.blocks.HyperEntranceBlock;
@@ -32,7 +33,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.network.PacketDistributor;
+import com.pedrorok.hypertube.network.ClientNetworkHandler;
+import com.pedrorok.hypertube.network.NetworkHandler;
 
 import java.util.UUID;
 
@@ -53,7 +55,7 @@ public class TravelManager {
         BlockPos pos = blockEntity.getBlockPos();
         boolean isJunction = state.getBlock() instanceof HyperJunctionBlock;
 
-        CompoundTag entityPersistentData = entity.getPersistentData();
+        CompoundTag entityPersistentData = PersistentData.get(entity);
         if (entityPersistentData.getBoolean(TRAVEL_TAG) && !isJunction) return false;
 
         boolean isPlayer = entity instanceof ServerPlayer;
@@ -100,7 +102,7 @@ public class TravelManager {
                 finalSpeed,
                 travelPathData.isFinishWithJunction(),
                 travelPathData.getJunctionDirection());
-        PacketDistributor.sendToPlayersTrackingEntityAndSelf(entity, movePathPacket);
+        NetworkHandler.sendToPlayersTrackingEntityAndSelf(entity, movePathPacket);
         Vec3 center = pos.getCenter();
         Mods.SABLE.executeIfInstalled(() -> () -> SableCompat.stickToSubLevel(entity, center));
 
@@ -146,12 +148,12 @@ public class TravelManager {
         if (level.isClientSide) return;
         TravelPathMover pathMover = travelDataMap.get(entity.getUUID());
         travelDataMap.remove(entity.getUUID());
-        entity.getPersistentData().putBoolean(TRAVEL_TAG, false);
-        entity.getPersistentData().putLong(LAST_TRAVEL_TIME, System.currentTimeMillis() + DEFAULT_TRAVEL_TIME);
-        entity.getPersistentData().putLong(LAST_TRAVEL_BLOCKPOS, pathMover.getLastPos().asLong());
+        PersistentData.get(entity).putBoolean(TRAVEL_TAG, false);
+        PersistentData.get(entity).putLong(LAST_TRAVEL_TIME, System.currentTimeMillis() + DEFAULT_TRAVEL_TIME);
+        PersistentData.get(entity).putLong(LAST_TRAVEL_BLOCKPOS, pathMover.getLastPos().asLong());
         float finalSpeed = pathMover.getTravelSpeed();
-        entity.getPersistentData().putFloat(LAST_TRAVEL_SPEED, finalSpeed);
-        entity.getPersistentData().putBoolean(IMMUNITY_TAG, true);
+        PersistentData.get(entity).putFloat(LAST_TRAVEL_SPEED, finalSpeed);
+        PersistentData.get(entity).putBoolean(IMMUNITY_TAG, true);
 
         syncPersistentData(entity);
 
@@ -228,8 +230,8 @@ public class TravelManager {
 
     private static void handleServer(LivingEntity entity) {
         if (!travelDataMap.containsKey(entity.getUUID())) {
-            if (!entity.getPersistentData().getBoolean(TRAVEL_TAG)) return;
-            entity.getPersistentData().putBoolean(TRAVEL_TAG, false);
+            if (!PersistentData.get(entity).getBoolean(TRAVEL_TAG)) return;
+            PersistentData.get(entity).putBoolean(TRAVEL_TAG, false);
             return;
         }
         TravelPathMover travelPathData = travelDataMap.get(entity.getUUID());
@@ -238,13 +240,13 @@ public class TravelManager {
     }
 
     public static boolean hasHyperTubeData(Entity entity) {
-        return entity.getPersistentData().getBoolean(TRAVEL_TAG);
+        return PersistentData.get(entity).getBoolean(TRAVEL_TAG);
     }
 
 
     private static void syncPersistentData(LivingEntity entity) {
         PlayerSyncEvents.syncPlayerStateToAll(entity, true);
         if (entity instanceof ServerPlayer player)
-            PacketDistributor.sendToPlayer(player, SyncPersistentDataPacket.create(entity));
+            NetworkHandler.sendToPlayer(player, SyncPersistentDataPacket.create(entity));
     }
 }

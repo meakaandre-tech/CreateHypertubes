@@ -1,5 +1,6 @@
 package com.pedrorok.hypertube.mixin.core;
 
+import com.pedrorok.hypertube.core.data.PersistentData;
 import com.pedrorok.hypertube.core.travel.TravelConstants;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
@@ -18,7 +19,7 @@ public abstract class PlayerMovementMixin {
     @Inject(method = "canPlayerFitWithinBlocksAndEntitiesWhen", at = @At("HEAD"), cancellable = true)
     private void createHypertube$onCanPlayerFitWithinBlocksAndEntitiesWhen(Pose p_294172_, CallbackInfoReturnable<Boolean> cir) {
         Player player = (Player) (Object) this;
-        if (!player.getPersistentData().getBoolean(TravelConstants.TRAVEL_TAG)) return;
+        if (!PersistentData.get(player).getBoolean(TravelConstants.TRAVEL_TAG)) return;
         cir.setReturnValue(true);
     }
 }

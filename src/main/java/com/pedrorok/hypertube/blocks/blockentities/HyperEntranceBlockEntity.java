@@ -1,5 +1,6 @@
 package com.pedrorok.hypertube.blocks.blockentities;
 
+import com.pedrorok.hypertube.core.data.PersistentData;
 import com.pedrorok.hypertube.HypertubeMod;
 import com.pedrorok.hypertube.blocks.HyperEntranceBlock;
 import com.pedrorok.hypertube.blocks.blockentities.parent.ActionTubeBlockEntity;
@@ -95,14 +96,14 @@ public class HyperEntranceBlockEntity extends ActionTubeBlockEntity implements I
         boolean isNotLocked = !getBlockState().getValue(HyperEntranceBlock.LOCKED);
         LivingEntity nearbyEntity = getNearbyLivingEntities((ServerLevel) level, pos.getCenter());
 
-        boolean canOpen = nearbyEntity != null && (isNotLocked || nearbyEntity.isShiftKeyDown() || nearbyEntity.getPersistentData().getBoolean(TravelConstants.TRAVEL_TAG));
+        boolean canOpen = nearbyEntity != null && (isNotLocked || nearbyEntity.isShiftKeyDown() || PersistentData.get(nearbyEntity).getBoolean(TravelConstants.TRAVEL_TAG));
 
         if (isTubeClosed(canOpen, isOpen)) return;
 
         LivingEntity inRangeEntity = getInRangeLivingEntities((ServerLevel) level, pos.getCenter(), state.getValue(HyperEntranceBlock.FACING));
         if (inRangeEntity == null) return;
 
-        if (isNotLocked && inRangeEntity.isShiftKeyDown() && !inRangeEntity.getPersistentData().getBoolean(TravelConstants.TRAVEL_TAG)) {
+        if (isNotLocked && inRangeEntity.isShiftKeyDown() && !PersistentData.get(inRangeEntity).getBoolean(TravelConstants.TRAVEL_TAG)) {
             return;
         }
 

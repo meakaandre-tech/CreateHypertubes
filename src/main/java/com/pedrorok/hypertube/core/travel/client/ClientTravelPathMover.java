@@ -24,7 +24,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.network.PacketDistributor;
+import com.pedrorok.hypertube.network.ClientNetworkHandler;
+import com.pedrorok.hypertube.network.NetworkHandler;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Iterator;
@@ -94,7 +95,7 @@ public class ClientTravelPathMover {
             }
 
             if (data.isDone() && !data.isJunctionEnd()) {
-                PacketDistributor.sendToServer(new FinishPathPacket(entity.getUUID()));
+                ClientNetworkHandler.sendToServer(new FinishPathPacket(entity.getUUID()));
                 Mods.SABLE.executeIfInstalled(() -> () -> SableCompat.stickToSubLevel(entity, null));
                 it.remove();
                 HypertubeMod.LOGGER.debug("Entity {} has finished its path, removing from active paths", id);
@@ -293,7 +294,7 @@ public class ClientTravelPathMover {
             if (!actionPoints.remove(actionPos)) return;
             Block block = entity.level().getBlockState(actionPos).getBlock();
             if (block instanceof ITubeActionPoint travelAction) {
-                PacketDistributor.sendToServer(new ActionPointReachPacket(entity.getUUID(), actionPos));
+                ClientNetworkHandler.sendToServer(new ActionPointReachPacket(entity.getUUID(), actionPos));
             }
         }
 

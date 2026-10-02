@@ -1,5 +1,6 @@
 package com.pedrorok.hypertube.core.travel.client;
 
+import com.pedrorok.hypertube.core.data.PersistentData;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.pedrorok.hypertube.blocks.HyperJunctionBlock;
 import com.pedrorok.hypertube.blocks.blockentities.HyperJunctionBlockEntity;
@@ -24,7 +25,8 @@ import net.minecraft.util.Tuple;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.network.PacketDistributor;
+import com.pedrorok.hypertube.network.ClientNetworkHandler;
+import com.pedrorok.hypertube.network.NetworkHandler;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -45,7 +47,7 @@ public class ClientTravelPathRender {
         if (!endJunction) return;
         Level level = Minecraft.getInstance().player.level();
         tryCacheDirectionTuple(level, data, MoveDirection.RIGHT);
-        PacketDistributor.sendToServer(new MoveDirectionPacket(lastValidMoveDir));
+        ClientNetworkHandler.sendToServer(new MoveDirectionPacket(lastValidMoveDir));
         isTraveling = true;
         canChangeDirection = level.getBlockState(data.getLastBlockPos()).getValue(HyperJunctionBlock.JUNCTION_MODE).equals(JunctionMode.AUTOMATIC);
     }
@@ -81,7 +83,7 @@ public class ClientTravelPathRender {
         if (lastValidDirection == null) return;
 
         if (ClientKeyInputTracker.hasPlayerPressedAnyKey()) {
-            PacketDistributor.sendToServer(new MoveDirectionPacket(lastValidMoveDir));
+            ClientNetworkHandler.sendToServer(new MoveDirectionPacket(lastValidMoveDir));
         }
 
         if (player.tickCount % 10 != 0)
@@ -119,7 +121,7 @@ public class ClientTravelPathRender {
         }
         LocalPlayer player = mc.player;
         if (player == null) return;
-        if (!player.getPersistentData().getBoolean(TravelConstants.TRAVEL_TAG)) return;
+        if (!PersistentData.get(player).getBoolean(TravelConstants.TRAVEL_TAG)) return;
         if (lastValidDirection == null) return;
 
         PoseStack poseStack = guiGraphics.pose();

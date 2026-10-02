@@ -8,7 +8,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.Identifier;
-import net.neoforged.neoforge.network.handling.IPayloadContext;
+import com.pedrorok.hypertube.network.PayloadContext;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
@@ -38,7 +38,7 @@ public record ActionPointReachPacket(UUID entityId, BlockPos pos) implements Cus
         return new ActionPointReachPacket(id, pos);
     }
 
-    public static void handle(ActionPointReachPacket packet, IPayloadContext ctx) {
+    public static void handle(ActionPointReachPacket packet, PayloadContext ctx) {
         ctx.enqueueWork(() -> {
             TravelManager.actionPointReach(packet.entityId, packet.pos);
         });

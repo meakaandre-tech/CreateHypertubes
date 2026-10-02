@@ -1,40 +1,31 @@
 package com.pedrorok.hypertube.registry;
 
 import com.pedrorok.hypertube.HypertubeMod;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.neoforge.registries.DeferredHolder;
-import net.neoforged.neoforge.registries.DeferredRegister;
+
+import java.util.function.Supplier;
 
 /**
- * @author Rok, Pedro Lucas nmm. Created on 26/05/2025
+ * @author Rok, Pedro Lucas nmm. Created on 02/06/2025
  * @project Create Hypertube
  */
 public class ModSounds {
 
-    public static final DeferredRegister<SoundEvent> SOUNDS = DeferredRegister.create(Registries.SOUND_EVENT, HypertubeMod.MOD_ID);
+    public static final Supplier<SoundEvent> HYPERTUBE_SUCTION = register("suction");
+    public static final Supplier<SoundEvent> TRAVELING = register("traveling");
+    public static final Supplier<SoundEvent> HYPERTUBE_ENTRANCE_OPEN = register("entrance_open");
+    public static final Supplier<SoundEvent> HYPERTUBE_ENTRANCE_CLOSE = register("entrance_close");
+    public static final Supplier<SoundEvent> CHOSE_DIRECTION = register("chose_direction");
 
-
-    public static final DeferredHolder<SoundEvent, SoundEvent> HYPERTUBE_SUCTION = SOUNDS.register("suction",
-            () -> SoundEvent.createVariableRangeEvent(HypertubeMod.of("suction")));
-
-    public static final DeferredHolder<SoundEvent, SoundEvent> TRAVELING = SOUNDS.register("traveling",
-            () -> SoundEvent.createVariableRangeEvent(HypertubeMod.of("traveling")));
-
-    public static final DeferredHolder<SoundEvent, SoundEvent> HYPERTUBE_ENTRANCE_OPEN = SOUNDS.register("entrance_open",
-            () -> SoundEvent.createVariableRangeEvent(HypertubeMod.of("entrance_open")));
-
-    public static final DeferredHolder<SoundEvent, SoundEvent> HYPERTUBE_ENTRANCE_CLOSE = SOUNDS.register("entrance_close",
-            () -> SoundEvent.createVariableRangeEvent(HypertubeMod.of("entrance_close")));
-
-    public static final DeferredHolder<SoundEvent, SoundEvent> CHOSE_DIRECTION = SOUNDS.register("chose_direction",
-            () -> SoundEvent.createVariableRangeEvent(HypertubeMod.of("chose_direction")));
-
-    public static void register(IEventBus eventBus) {
-        SOUNDS.register(eventBus);
+    private static Supplier<SoundEvent> register(String name) {
+        Identifier id = HypertubeMod.of(name);
+        SoundEvent event = Registry.register(BuiltInRegistries.SOUND_EVENT, id, SoundEvent.createVariableRangeEvent(id));
+        return () -> event;
     }
 
+    public static void register() {
+    }
 }

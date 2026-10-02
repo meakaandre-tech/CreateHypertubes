@@ -1,5 +1,6 @@
 package com.pedrorok.hypertube.mixin.core;
 
+import com.pedrorok.hypertube.core.data.PersistentData;
 import com.pedrorok.hypertube.core.travel.TravelConstants;
 import net.minecraft.client.player.LocalPlayer;
 import org.spongepowered.asm.mixin.Mixin;
@@ -17,7 +18,7 @@ public class LocalPlayerMixin {
     @Inject(method = "isShiftKeyDown", at = @At("HEAD"), cancellable = true)
     private void createHypertube$cancelShiftKeyDown(CallbackInfoReturnable<Boolean> cir) {
         LocalPlayer player = (LocalPlayer) (Object) this;
-        if (!player.getPersistentData().getBoolean(TravelConstants.TRAVEL_TAG)) return;
+        if (!PersistentData.get(player).getBoolean(TravelConstants.TRAVEL_TAG)) return;
         cir.setReturnValue(false);
     }
 }

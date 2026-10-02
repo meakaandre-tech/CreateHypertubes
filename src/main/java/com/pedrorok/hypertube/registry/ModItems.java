@@ -2,33 +2,37 @@ package com.pedrorok.hypertube.registry;
 
 import com.pedrorok.hypertube.HypertubeMod;
 import com.pedrorok.hypertube.items.TubeAttachmentItem;
-import com.simibubi.create.foundation.data.CreateRegistrate;
-import com.tterrag.registrate.util.entry.ItemEntry;
+import com.pedrorok.hypertube.registry.entry.ItemEntry;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
 
+import java.util.function.Function;
+
 /**
- * @author Rok, Pedro Lucas nmm. Created on 19/11/2025
+ * @author Rok, Pedro Lucas nmm. Created on 17/04/2025
  * @project Create Hypertube
  */
 public class ModItems {
 
-    private static final CreateRegistrate REGISTRATE = HypertubeMod.get();
+    public static final ItemEntry<Item> HYPERTUBE_FUNNEL = item("hypertube_funnel", Item::new, true);
 
-    public static final ItemEntry<Item> HYPERTUBE_FUNNEL = REGISTRATE.item("hypertube_funnel", Item::new)
-            .model((ctx, prov) -> {})
-            .register();
+    public static final ItemEntry<TubeAttachmentItem> REDSTONE_DETECTOR = item("redstone_detector_tube_attachment", properties -> new TubeAttachmentItem("redstone_input", properties), true);
 
-    public static final ItemEntry<TubeAttachmentItem> REDSTONE_DETECTOR = REGISTRATE.item("redstone_detector_tube_attachment", (properties) -> new TubeAttachmentItem("redstone_input", properties))
-            .model((ctx, prov) -> {})
-            .register();
+    public static final ItemEntry<TubeAttachmentItem> TUBE_SCANNER = item("tube_scanner_attachment", properties -> new TubeAttachmentItem("tube_scanner", properties), true);
 
-    public static final ItemEntry<TubeAttachmentItem> TUBE_SCANNER = REGISTRATE.item("tube_scanner_attachment", (properties) -> new TubeAttachmentItem("tube_scanner", properties))
-            .model((ctx, prov) -> {})
-            .register();
+    public static final ItemEntry<Item> TUBE_SCANNER_UNFINISHED = item("tube_scanner_unfinished", Item::new, false);
 
-    public static final ItemEntry<Item> TUBE_SCANNER_UNFINISHED = REGISTRATE.item("tube_scanner_unfinished", Item::new)
-            .model((ctx, prov) -> {})
-            .register();
+    private static <T extends Item> ItemEntry<T> item(String name, Function<Item.Properties, T> factory, boolean inTab) {
+        ResourceKey<Item> key = ResourceKey.create(Registries.ITEM, HypertubeMod.of(name));
+        T item = Registry.register(BuiltInRegistries.ITEM, key, factory.apply(new Item.Properties().setId(key)));
+        if (inTab) {
+            ModBlocks.TAB_ITEMS.add(item);
+        }
+        return new ItemEntry<>(item);
+    }
 
     public static void register() {
     }

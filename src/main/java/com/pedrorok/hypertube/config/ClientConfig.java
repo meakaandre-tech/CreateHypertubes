@@ -1,37 +1,32 @@
 package com.pedrorok.hypertube.config;
 
-import net.neoforged.neoforge.common.ModConfigSpec;
-import org.apache.commons.lang3.tuple.Pair;
+import com.google.gson.JsonObject;
+import com.pedrorok.hypertube.HypertubeMod;
 
 /**
- * @author Rok, Pedro Lucas nmm. Created on 05/06/2025
+ * @author Rok, Pedro Lucas nmm. Created on 03/06/2025
  * @project Create Hypertube
  */
 public class ClientConfig {
-    public static final ModConfigSpec SPEC;
-    private static final ClientConfig INSTANCE;
+    private static final String FILE = HypertubeMod.MOD_ID + "-client.json";
+    private static final ClientConfig INSTANCE = new ClientConfig();
 
-    public final ModConfigSpec.BooleanValue ALLOW_FPV_INSIDE_TUBE;
+    /** Allow first-person view inside the tube. Default is false for better experience. */
+    public final ConfigValue<Boolean> ALLOW_FPV_INSIDE_TUBE = new ConfigValue<>(false);
 
-    private ClientConfig(ModConfigSpec.Builder builder) {
-        builder.comment("Change these settings to customize the client-side behavior of the mod.")
-                .push("Gameplay");
-
-        ALLOW_FPV_INSIDE_TUBE = builder
-                .comment("Allow first-person view inside the tube. Default is false for better experience.")
-                .translation("hypertube.config.client.allowFPVInsideTube")
-                .define("allowFPVInsideTheTube", false);
-
-        builder.pop();
-    }
-
-    static {
-        Pair<ClientConfig, ModConfigSpec> pair = new ModConfigSpec.Builder().configure(ClientConfig::new);
-        INSTANCE = pair.getLeft();
-        SPEC = pair.getRight();
+    private ClientConfig() {
     }
 
     public static ClientConfig get() {
         return INSTANCE;
+    }
+
+    public static void load() {
+        JsonObject json = ConfigFile.read(FILE);
+        if (json.has("allowFPVInsideTheTube")) {
+            INSTANCE.ALLOW_FPV_INSIDE_TUBE.set(json.get("allowFPVInsideTheTube").getAsBoolean());
+        }
+        json.addProperty("allowFPVInsideTheTube", INSTANCE.ALLOW_FPV_INSIDE_TUBE.get());
+        ConfigFile.write(FILE, json);
     }
 }

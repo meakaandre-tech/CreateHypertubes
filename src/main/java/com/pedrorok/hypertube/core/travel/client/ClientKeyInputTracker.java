@@ -5,7 +5,8 @@ import com.pedrorok.hypertube.registry.ModSounds;
 import com.pedrorok.hypertube.core.data.MoveDirection;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
-import net.neoforged.neoforge.network.PacketDistributor;
+import com.pedrorok.hypertube.network.ClientNetworkHandler;
+import com.pedrorok.hypertube.network.NetworkHandler;
 
 /**
  * @author Rok, Pedro Lucas nmm. 16/06/2026
@@ -20,7 +21,7 @@ public class ClientKeyInputTracker {
     private static MoveDirection lastDirection = MoveDirection.RIGHT;
 
     public static void handlePlayerStart() {
-        PacketDistributor.sendToServer(new MoveDirectionPacket(lastDirection));
+        ClientNetworkHandler.sendToServer(new MoveDirectionPacket(lastDirection));
     }
 
     public static MoveDirection handlePlayerInputs() {

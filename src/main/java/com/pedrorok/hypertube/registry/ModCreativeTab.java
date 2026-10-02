@@ -1,55 +1,34 @@
 package com.pedrorok.hypertube.registry;
 
 import com.pedrorok.hypertube.HypertubeMod;
-import com.simibubi.create.foundation.data.CreateRegistrate;
-import com.tterrag.registrate.util.entry.RegistryEntry;
-import net.minecraft.core.registries.Registries;
+import net.fabricmc.fabric.api.creativetab.v1.FabricCreativeModeTab;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.level.block.Block;
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
-import net.neoforged.neoforge.registries.DeferredHolder;
-import net.neoforged.neoforge.registries.DeferredRegister;
 
 /**
  * @author Rok, Pedro Lucas nmm. Created on 21/04/2025
  * @project Create Hypertube
  */
-@EventBusSubscriber(modid = HypertubeMod.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public class ModCreativeTab {
 
-    public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS =
-            DeferredRegister.create(Registries.CREATIVE_MODE_TAB, HypertubeMod.MOD_ID);
+    public static CreativeModeTab TUBE_TAB;
 
-    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> TUBE_TAB =
-            CREATIVE_MODE_TABS.register("create_hypertubes", () ->
-                    CreativeModeTab.builder()
-                            .title(Component.translatable("itemGroup." + HypertubeMod.MOD_ID))
-                            .icon(ModBlocks.HYPERTUBE::asStack)
-                            .build()
-            );
-
-    public static void register(IEventBus eventBus) {
-        CREATIVE_MODE_TABS.register(eventBus);
+    public static void register() {
+        TUBE_TAB = Registry.register(
+                BuiltInRegistries.CREATIVE_MODE_TAB,
+                HypertubeMod.of("create_hypertubes"),
+                FabricCreativeModeTab.builder()
+                        .title(Component.translatable("itemGroup." + HypertubeMod.MOD_ID))
+                        .icon(ModBlocks.HYPERTUBE::asStack)
+                        .displayItems((parameters, output) -> {
+                            for (Item item : ModBlocks.TAB_ITEMS) {
+                                output.accept(item);
+                            }
+                        })
+                        .build()
+        );
     }
-
-    @SubscribeEvent
-    private static void addCreative(BuildCreativeModeTabContentsEvent event) {
-        if (event.getTabKey().equals(TUBE_TAB.getKey())) {
-            CreateRegistrate REGISTRATE = HypertubeMod.get();
-
-            for (RegistryEntry<Item, Item> entry : REGISTRATE.getAll(Registries.ITEM)) {
-                var item = entry.get();
-                if (item == Items.AIR) continue;
-                if (ModItems.TUBE_SCANNER_UNFINISHED.is(item)) return;
-                event.accept(item);
-            }
-        }
-    }
-
 }

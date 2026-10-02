@@ -1,5 +1,6 @@
 package com.pedrorok.hypertube.network.packets;
 
+import com.pedrorok.hypertube.core.data.PersistentData;
 import com.pedrorok.hypertube.HypertubeMod;
 import com.pedrorok.hypertube.core.travel.TravelConstants;
 import com.pedrorok.hypertube.core.travel.client.ClientTravelPathMover;
@@ -11,7 +12,7 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
-import net.neoforged.neoforge.network.handling.IPayloadContext;
+import com.pedrorok.hypertube.network.PayloadContext;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
@@ -49,11 +50,11 @@ public record SyncPersistentDataPacket(int entityId, CompoundTag readData) imple
     public static SyncPersistentDataPacket create(Entity entity) {
         return new SyncPersistentDataPacket(
                 entity.getId(),
-                entity.getPersistentData()
+                PersistentData.get(entity)
         );
     }
 
-    public static void handle(SyncPersistentDataPacket packet, IPayloadContext context) {
+    public static void handle(SyncPersistentDataPacket packet, PayloadContext context) {
         context.enqueueWork(() -> {
             handleClient(packet);
         });
@@ -62,7 +63,7 @@ public record SyncPersistentDataPacket(int entityId, CompoundTag readData) imple
     private static void handleClient(SyncPersistentDataPacket packet) {
         try {
             Entity entityByID = Minecraft.getInstance().level.getEntity(packet.entityId);
-            CompoundTag data = entityByID.getPersistentData();
+            CompoundTag data = PersistentData.get(entityByID);
             new HashSet<>(data.getAllKeys()).forEach(data::remove);
             data.merge(packet.readData);
             if (!data.getBoolean(TravelConstants.TRAVEL_TAG)) {

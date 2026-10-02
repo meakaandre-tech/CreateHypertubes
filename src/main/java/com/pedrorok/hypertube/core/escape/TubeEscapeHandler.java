@@ -1,5 +1,6 @@
 package com.pedrorok.hypertube.core.escape;
 
+import com.pedrorok.hypertube.core.data.PersistentData;
 import com.google.common.base.Strings;
 import com.pedrorok.hypertube.core.travel.TravelConstants;
 import com.pedrorok.hypertube.core.travel.client.ClientTravelPathMover;
@@ -13,7 +14,8 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
-import net.neoforged.neoforge.network.PacketDistributor;
+import com.pedrorok.hypertube.network.ClientNetworkHandler;
+import com.pedrorok.hypertube.network.NetworkHandler;
 
 
 /**
@@ -36,7 +38,7 @@ public class TubeEscapeHandler {
         }
         float value = holdKeyProgress.getValue();
 
-        if (!player.getPersistentData().getBoolean(TravelConstants.TRAVEL_TAG)) {
+        if (!PersistentData.get(player).getBoolean(TravelConstants.TRAVEL_TAG)) {
             if (value < 0) return;
             holdKeyProgress.setValue(Math.max(0, value - .05f));
             return;
@@ -71,7 +73,7 @@ public class TubeEscapeHandler {
 
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null) return;
-        if (!mc.player.getPersistentData().getBoolean(TravelConstants.TRAVEL_TAG)) return;
+        if (!mc.PersistentData.get(player).getBoolean(TravelConstants.TRAVEL_TAG)) return;
 
         Component bar = makeProgressBar(Math.min(1f, ((progress * 8f / 7f) - 0.1f) * 1.1F));
 
@@ -108,7 +110,7 @@ public class TubeEscapeHandler {
     }
 
     private static void sendPacketToServer() {
-        PacketDistributor.sendToServer(new EscapeTubePacket());
+        ClientNetworkHandler.sendToServer(new EscapeTubePacket());
         ClientTravelPathMover.stopMoving(Minecraft.getInstance().player.getId());
     }
 }

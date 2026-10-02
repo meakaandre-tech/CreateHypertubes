@@ -4,16 +4,17 @@
   "package": "com.pedrorok.hypertube.mixin.core",
   "compatibilityLevel": "JAVA_25",
   "mixins": [
+    "BlockItemPlaceMixin",
     "EntityTravelingMixin",
     "IPlayerExtensionMixin",
     "KineticBlockMixin",
+    "LivingEntityDimensionsMixin",
+    "LivingEntityTickMixin",
     "PlayerMixin",
     "PlayerMovementMixin",
     "ServerGamePacketListenerImplMixin"
   ],
   "client": [
-    "CameraAccessorMixin",
-    "CameraMixin",
     "LocalPlayerMixin",
     "PlayerModelAccessor",
     "PlayerModelMixin"

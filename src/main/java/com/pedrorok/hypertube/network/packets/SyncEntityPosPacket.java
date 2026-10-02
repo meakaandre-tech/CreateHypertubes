@@ -7,7 +7,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.world.entity.Entity;
-import net.neoforged.neoforge.network.handling.IPayloadContext;
+import com.pedrorok.hypertube.network.PayloadContext;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -42,7 +42,7 @@ public record SyncEntityPosPacket(int entityId, int segment) implements CustomPa
     }
 
 
-    public static void handle(SyncEntityPosPacket packet, IPayloadContext ctx) {
+    public static void handle(SyncEntityPosPacket packet, PayloadContext ctx) {
         ctx.enqueueWork(() -> {
             ClientTravelPathMover.updateSegment(packet.entityId, packet.segment);
         });

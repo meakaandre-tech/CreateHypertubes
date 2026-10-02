@@ -1,5 +1,6 @@
 package com.pedrorok.hypertube.mixin.core;
 
+import com.pedrorok.hypertube.core.data.PersistentData;
 import com.pedrorok.hypertube.core.travel.TravelConstants;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.common.extensions.IPlayerExtension;
@@ -18,7 +19,7 @@ public interface IPlayerExtensionMixin {
     @Inject(method = "mayFly", at = @At("HEAD"), cancellable = true)
     default void createHypertube$mayFly(CallbackInfoReturnable<Boolean> cir) {
         Player player = (Player) (Object) this;
-        if (!player.getPersistentData().getBoolean(TravelConstants.TRAVEL_TAG)) return;
+        if (!PersistentData.get(player).getBoolean(TravelConstants.TRAVEL_TAG)) return;
         cir.setReturnValue(false);
     }
 }
