@@ -62,5 +62,6 @@
   "create_hypertube.ponder.tag.hypertube_systems.description": "Blocks and items used in Hypertube transportation systems.",
   "block.create_hypertube.hypertube_junction": "Hypertube Splitter",
   "key.hypertube.tube_escape": "Hypertube Escape Button",
-  "key.categories.hypertube": "Create: Hypertube"
+  "key.categories.hypertube": "Create: Hypertube",
+  "key.category.create_hypertube.hypertube": "Create: Hypertube"
 }
