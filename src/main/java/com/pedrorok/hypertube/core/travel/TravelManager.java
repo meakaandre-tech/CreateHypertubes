@@ -186,7 +186,11 @@ public class TravelManager {
 
 
         if (level instanceof ServerLevel) {
-            entity.teleportTo((ServerLevel) level, lastBlockPos.x, lastBlockPos.y, lastBlockPos.z, Relative.ALL, entity.getYRot(), entity.getXRot(), false);
+            // 1.21.1 passed RelativeMovement.ALL with absolute coordinates: there the set only chose how the position
+            // packet was encoded. Since 1.21.2 a relative axis is a real offset, so Relative.ALL added the exit position
+            // to the traveller's own (a ride ended hundreds of blocks away, high in the air). Absolute position, and a
+            // relative rotation of zero to leave the view as it is.
+            entity.teleportTo((ServerLevel) level, lastBlockPos.x, lastBlockPos.y, lastBlockPos.z, Relative.ROTATION, 0f, 0f, false);
         }
         entity.setDeltaMovement(lastDir.scale(Math.max(finalSpeed, 1f)));
         entity.hurtMarked = true;
