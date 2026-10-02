@@ -1,7 +1,8 @@
 package com.pedrorok.hypertube.core.travel.client;
 
 import com.pedrorok.hypertube.core.data.PersistentData;
-import com.mojang.blaze3d.vertex.PoseStack;
+import com.zurrtum.create.client.catnip.placement.PlacementClient;
+import org.joml.Matrix3x2fStack;
 import com.pedrorok.hypertube.blocks.HyperJunctionBlock;
 import com.pedrorok.hypertube.blocks.blockentities.HyperJunctionBlockEntity;
 import com.pedrorok.hypertube.core.connection.BezierConnection;
@@ -16,7 +17,7 @@ import com.pedrorok.hypertube.utils.RenderUtils;
 import com.pedrorok.hypertube.utils.TubePulseRenderer;
 import com.zurrtum.create.catnip.math.AngleHelper;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -105,10 +106,10 @@ public class ClientTravelPathRender {
         TubePulseRenderer.start(pos, connection, inverted, 8, 0.08f, 0.6f, canChangeDirection ? ModColors.GREEN : ModColors.ORANGE, 5, false);
     }
 
-    public static void renderOverlay(GuiGraphics guiGraphics, float partialTick) {
+    public static void renderOverlay(GuiGraphicsExtractor guiGraphics, float partialTick) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.gameMode == null) return;
-        if (mc.options.hideGui || mc.gameMode.getPlayerMode() == GameType.SPECTATOR)
+        if (mc.gui.hud.isHidden() || mc.gameMode.getPlayerMode() == GameType.SPECTATOR)
             return;
 
         if (!isTraveling) return;
@@ -123,9 +124,9 @@ public class ClientTravelPathRender {
         if (!PersistentData.get(player).getBooleanOr(TravelConstants.TRAVEL_TAG, false)) return;
         if (lastValidDirection == null) return;
 
-        PoseStack poseStack = guiGraphics.pose();
-        poseStack.pushPose();
-        poseStack.translate((double) guiGraphics.guiWidth() / 2 - 91, guiGraphics.guiHeight() / 1.5, 0);
+        // Same spot as before: centred above the hotbar, two thirds down the screen.
+        float centerX = guiGraphics.guiWidth() / 2f;
+        float centerY = guiGraphics.guiHeight() / 1.5f - 9;
 
         // Direction
 
@@ -138,10 +139,11 @@ public class ClientTravelPathRender {
 
         float snappedAngle = (snapSize * Math.round(diff / snapSize)) % 360f;
 
-        poseStack.translate(91, -9, 0);
-        poseStack.scale(0.925f, 0.925f, 1);
-        RenderUtils.directionArrow(poseStack, 0, 0, 1, canChangeDirection ? 0xffffff : ModColors.ORANGE, snappedAngle);
-
-        poseStack.popPose();
+        Matrix3x2fStack pose = guiGraphics.pose();
+        pose.pushMatrix();
+        pose.translate(centerX, centerY);
+        pose.scale(0.925f, 0.925f);
+        PlacementClient.textured(guiGraphics, 0, 0, 1, snappedAngle);
+        pose.popMatrix();
     }
 }

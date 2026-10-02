@@ -1,7 +1,6 @@
 package com.pedrorok.hypertube.core.placement;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.pedrorok.hypertube.blocks.HypertubeBlock;
 import com.pedrorok.hypertube.core.connection.BezierConnection;
 import com.pedrorok.hypertube.core.connection.SimpleConnection;
@@ -17,8 +16,7 @@ import com.zurrtum.create.client.content.trains.track.TrackBlockOutline;
 import com.zurrtum.create.catnip.animation.LerpedFloat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -237,22 +235,23 @@ public class TubePlacement {
             );
         }
     }
-    public static void drawCustomBlockSelection(PoseStack ms, MultiBufferSource buffer, Vec3 camera) {
-        ItemStack mainHandItem = Minecraft.getInstance().player.getMainHandItem();
+    public static void drawCustomBlockSelection(PoseStack ms, SubmitNodeCollector queue, Vec3 camera, float lineWidth) {
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.player == null || mc.level == null) return;
+        ItemStack mainHandItem = mc.player.getMainHandItem();
         if (!mainHandItem.is(ModBlocks.HYPERTUBE.asItem())) return;
         if (!mainHandItem.hasFoil()) return;
         SimpleConnection connection = mainHandItem.get(ModDataComponent.TUBE_CONNECTING_FROM);
         if (connection == null) return;
 
-        Minecraft mc = Minecraft.getInstance();
         BlockState blockState = mc.level.getBlockState(connection.pos());
         if (!(blockState.getBlock() instanceof HypertubeBlock)) return;
         HypertubeBlock block = (HypertubeBlock) blockState.getBlock();
 
-        VertexConsumer vb = buffer.getBuffer(RenderType.lines());
         ms.pushPose();
         ms.translate(connection.pos().getX() - camera.x, connection.pos().getY() - camera.y, connection.pos().getZ() - camera.z);
-        TrackBlockOutline.renderShape(block.getShape(blockState), ms, vb, canPlace);
+        TrackBlockOutline.submitShape(block.getShape(blockState), ms, queue,
+                canPlace ? TrackBlockOutline.WHITE_COLOR : TrackBlockOutline.RED_COLOR, lineWidth);
         ms.popPose();
     }
 }

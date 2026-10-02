@@ -11,7 +11,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
 import com.pedrorok.hypertube.network.ClientNetworkHandler;
@@ -64,7 +64,7 @@ public class TubeEscapeHandler {
         }
     }
 
-    public static void onRenderGuiOverlay(GuiGraphics guiGraphics, DeltaTracker partialTick) {
+    public static void onRenderGuiOverlay(GuiGraphicsExtractor guiGraphics, DeltaTracker partialTick) {
 
         float partialTicks = partialTick.getGameTimeDeltaPartialTick(true);
         float progress = holdKeyProgress.getValue(partialTicks);
@@ -85,7 +85,7 @@ public class TubeEscapeHandler {
         int x = (screenWidth - textWidth) / 2;
         int y = screenHeight - 59;
 
-        guiGraphics.drawString(font, bar, x, y, 0xFFFFFFFF, true);
+        guiGraphics.text(font, bar, x, y, 0xFFFFFFFF, true);
     }
 
     private static Component makeProgressBar(float progress) {

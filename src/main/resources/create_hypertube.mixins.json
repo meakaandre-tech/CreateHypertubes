@@ -13,8 +13,10 @@
     "ServerGamePacketListenerImplMixin"
   ],
   "client": [
+    "AvatarRendererMixin",
+    "GameRendererMixin",
+    "LivingEntityRendererMixin",
     "LocalPlayerMixin",
-    "PlayerModelAccessor",
     "PlayerModelMixin"
   ],
   "injectors": {

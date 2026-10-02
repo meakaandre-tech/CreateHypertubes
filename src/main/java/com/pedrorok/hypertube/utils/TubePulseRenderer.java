@@ -4,16 +4,13 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.pedrorok.hypertube.core.connection.BezierConnection;
 import com.pedrorok.hypertube.core.connection.SimpleConnection;
-import net.minecraft.client.Camera;
-import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
 import java.util.ArrayList;
@@ -91,40 +88,33 @@ public final class TubePulseRenderer {
 
     // Event
 
-    public static void onRenderLevelStage(PoseStack poseStack, DeltaTracker deltaTracker, Camera camera) {
+    public static void onRenderLevelStage(PoseStack poseStack, SubmitNodeCollector queue, Vec3 camPos, float lineWidth) {
         if (ACTIVE_EFFECTS.isEmpty()) return;
 
-        float deltaTime = deltaTracker.getRealtimeDeltaTicks();
+        float deltaTime = Minecraft.getInstance().getDeltaTracker().getRealtimeDeltaTicks();
 
-        MultiBufferSource bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
-        VertexConsumer builder = bufferSource.getBuffer(RenderType.lines());
-
-        Vec3 camPos = camera.getPosition();
-
+        List<TubePulseEffect> visible = new ArrayList<>();
         for (TubePulseEffect effect : ACTIVE_EFFECTS) {
             effect.tick(deltaTime);
             if (effect.isFinished()) continue;
-            renderEffect(effect, poseStack, builder, camPos);
+            visible.add(effect);
         }
-
         ACTIVE_EFFECTS.removeIf(TubePulseEffect::isFinished);
+        if (visible.isEmpty()) return;
+
+        queue.submitCustomGeometry(poseStack, RenderTypes.lines(), (pose, builder) -> {
+            for (TubePulseEffect effect : visible) {
+                BlockPos origin = effect.getOriginBlockPos();
+                Vec3 originAbsolute = new Vec3(origin.getX(), origin.getY(), origin.getZ());
+                renderEffectAt(effect, pose, builder, originAbsolute.subtract(camPos), 0, lineWidth);
+            }
+        });
     }
 
 
     // Render
-    private static void renderEffect(TubePulseEffect effect, PoseStack poseStack, VertexConsumer builder, Vec3 camPos) {
-        BlockPos origin = effect.getOriginBlockPos();
-        Vec3 originAbsolute = new Vec3(origin.getX(), origin.getY(), origin.getZ());
-
-        renderEffectAt(effect, poseStack, builder, originAbsolute.subtract(camPos), 0);
-    }
-
-    public static void renderEffectAt(TubePulseEffect effect, PoseStack poseStack, VertexConsumer builder, Vec3 renderOrigin, float partialTicks) {
+    public static void renderEffectAt(TubePulseEffect effect, PoseStack.Pose pose, VertexConsumer builder, Vec3 renderOrigin, float partialTicks, float lineWidth) {
         List<Vec3> points = effect.getRelativePoints();
-
-        poseStack.pushPose();
-        poseStack.translate(renderOrigin.x, renderOrigin.y, renderOrigin.z);
-        Matrix4f pose = poseStack.last().pose();
 
         float traveled = effect.getTravelDistance() + effect.getSpeed() * partialTicks;
         float spacing = effect.getRingSpacing();
@@ -136,10 +126,9 @@ public final class TubePulseRenderer {
             RingTransform transform = resolveRingTransform(points, distanceAlongPath);
             if (transform == null) continue;
 
-            drawRing(builder, pose, transform, effect.getColorFromProgress(), effect.getOpacity(), effect.getRingRadius());
+            transform = new RingTransform(transform.center().add(renderOrigin), transform.perpA(), transform.perpB());
+            drawRing(builder, pose, transform, effect.getColorFromProgress(), effect.getOpacity(), effect.getRingRadius(), lineWidth);
         }
-
-        poseStack.popPose();
     }
 
     private static RingTransform resolveRingTransform(List<Vec3> points, float distanceAlongPath) {
@@ -201,7 +190,7 @@ public final class TubePulseRenderer {
         return new Vector3f[]{perpA, perpB};
     }
 
-    private static void drawRing(VertexConsumer builder, Matrix4f pose, RingTransform transform, int color, int opacity, float ringRadius) {
+    private static void drawRing(VertexConsumer builder, PoseStack.Pose pose, RingTransform transform, int color, int opacity, float ringRadius, float lineWidth) {
         int r = (color >> 16) & 0xFF;
         int g = (color >> 8) & 0xFF;
         int b = color & 0xFF;
@@ -215,7 +204,7 @@ public final class TubePulseRenderer {
         for (int i = 0; i < RING_SEGMENTS; i++) {
             Vector3f a = ringPoints.get(i);
             Vector3f b2 = ringPoints.get((i + 1) % RING_SEGMENTS);
-            addLine(builder, pose, transform.center(), a, b2, r, g, b, opacity);
+            addLine(builder, pose, transform.center(), a, b2, r, g, b, opacity, lineWidth);
         }
     }
 
@@ -229,7 +218,7 @@ public final class TubePulseRenderer {
         );
     }
 
-    private static void addLine(VertexConsumer builder, Matrix4f pose, Vec3 center, Vector3f from, Vector3f to, int r, int g, int b, int opacity) {
+    private static void addLine(VertexConsumer builder, PoseStack.Pose pose, Vec3 center, Vector3f from, Vector3f to, int r, int g, int b, int opacity, float lineWidth) {
         float x1 = (float) center.x + from.x;
         float y1 = (float) center.y + from.y;
         float z1 = (float) center.z + from.z;
@@ -241,10 +230,12 @@ public final class TubePulseRenderer {
 
         builder.addVertex(pose, x1, y1, z1)
                 .setColor(r, g, b, opacity)
-                .setNormal(normal.x, normal.y, normal.z);
+                .setNormal(pose, normal.x, normal.y, normal.z)
+                .setLineWidth(lineWidth);
         builder.addVertex(pose, x2, y2, z2)
                 .setColor(r, g, b, opacity)
-                .setNormal(normal.x, normal.y, normal.z);
+                .setNormal(pose, normal.x, normal.y, normal.z)
+                .setLineWidth(lineWidth);
     }
 
     private record RingTransform(Vec3 center, Vector3f perpA, Vector3f perpB) {
