@@ -227,7 +227,7 @@ public class TubePlacement {
         if (!itemInHand.hasFoil()) return;
         SimpleConnection connection = itemInHand.get(ModDataComponent.TUBE_CONNECTING_FROM);
         if (connection == null) return;
-        if (!(level.getBlockEntity(new BlockPos(connection.pos())) instanceof ITubeConnectionEntity)) {
+        if (!(level.getBlockEntity(connection.pos()) instanceof ITubeConnectionEntity)) {
             HypertubeItem.clearConnection(itemInHand);
             MessageUtils.sendActionMessage(player,
                     Component.translatable("placement.create_hypertube.conn_cleared_invalid_block").withColor(0xFF0000)

@@ -126,7 +126,7 @@ public abstract class TubeBlock extends KineticBlock implements ITubeConnection,
             if (this instanceof HypertubeBlock) {
                 toDrop += 1;
             } else {
-                player.getInventory().placeItemBackInInventory(getItem().getDefaultInstance());
+                player.getInventory().placeItemBackInInventory(getItem().getDefaultInstance(), net.minecraft.util.Prediction.SERVER_ONLY);
             }
         }
 
@@ -139,7 +139,7 @@ public abstract class TubeBlock extends KineticBlock implements ITubeConnection,
         if (!player.isCreative()) {
             if (amount != 0 || isWrenched) {
                 ItemStack stack = new ItemStack(ModBlocks.HYPERTUBE.get(), amount);
-                if (isWrenched) player.getInventory().placeItemBackInInventory(stack);
+                if (isWrenched) player.getInventory().placeItemBackInInventory(stack, net.minecraft.util.Prediction.SERVER_ONLY);
                 else Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), stack);
             }
         }

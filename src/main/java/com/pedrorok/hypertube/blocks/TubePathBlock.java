@@ -138,7 +138,7 @@ public class TubePathBlock extends Block implements EntityBlock, SimpleWaterlogg
         if (player.isCreative() || toDrop <= 0) return;
         ItemStack stack = new ItemStack(ModBlocks.HYPERTUBE.get(), toDrop);
         if (toInventory) {
-            player.getInventory().placeItemBackInInventory(stack);
+            player.getInventory().placeItemBackInInventory(stack, net.minecraft.util.Prediction.SERVER_ONLY);
         } else {
             Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), stack);
         }

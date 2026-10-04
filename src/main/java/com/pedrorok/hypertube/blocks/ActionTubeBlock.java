@@ -128,7 +128,7 @@ public abstract class ActionTubeBlock extends TubeBlock {
         if (!(blockEntity instanceof ActionTubeBlockEntity actionTubeBlock)) return;
         actionTubeBlock.getTubeAttachments().forEach((dir, attachment) -> {
             ItemStack stack = attachment.getItemStack();
-            if (isWrenched) player.getInventory().placeItemBackInInventory(stack);
+            if (isWrenched) player.getInventory().placeItemBackInInventory(stack, net.minecraft.util.Prediction.SERVER_ONLY);
             else Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), stack);
         });
     }
@@ -150,7 +150,7 @@ public abstract class ActionTubeBlock extends TubeBlock {
         Player player = context.getPlayer();
         if (!player.isCreative()) {
             ItemStack stack = iTubeAttachment.getItemStack();
-            player.getInventory().placeItemBackInInventory(stack);
+            player.getInventory().placeItemBackInInventory(stack, net.minecraft.util.Prediction.SERVER_ONLY);
         }
         IWrenchable.playRemoveSound(context.getLevel(), context.getClickedPos());
         return InteractionResult.SUCCESS;
