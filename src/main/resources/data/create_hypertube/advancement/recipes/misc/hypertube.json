@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "create_hypertube:hypertube"
+        "recipes": "create_hypertube:hypertube"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

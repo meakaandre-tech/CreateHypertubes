@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "create_hypertube:redstone_detector_tube_attachment"
+        "recipes": "create_hypertube:redstone_detector_tube_attachment"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

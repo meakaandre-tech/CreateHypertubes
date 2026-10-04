@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.At;
 public class ServerGamePacketListenerImplMixin {
 
     @WrapOperation(
-            method = "handleMovePlayer",
+            method = "handlePlayerPositionChange",
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/server/level/ServerPlayer;isChangingDimension()Z"

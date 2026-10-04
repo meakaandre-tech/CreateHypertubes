@@ -1,0 +1,17 @@
+say restart-ok
+gamerule spawn_mobs false
+#sleep 5
+data get block 0 200 0 HypertubeConnections
+data get block 36 200 0 HypertubeConnections
+data get block 8 200 10 HypertubeConnections
+data get block 16 200 10 HypertubeConnections
+data get block 16 200 4 HypertubeConnections
+say == a villager rides line 1 after the restart
+summon minecraft:villager -0.5 200 0.5 {NoAI:1b}
+#sleep 8
+execute as @e[type=minecraft:villager] run data get entity @s Pos
+kill @e[type=minecraft:villager]
+say == a villager rides line 2 after the restart
+summon minecraft:villager -0.5 200 10.5 {NoAI:1b}
+#sleep 8
+execute as @e[type=minecraft:villager] run data get entity @s Pos

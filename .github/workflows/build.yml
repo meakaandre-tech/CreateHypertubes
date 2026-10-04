@@ -137,7 +137,7 @@ jobs:
                 sudo apt-get install -y -q xvfb xdotool imagemagick libgl1-mesa-dri libglx-mesa0 libegl1 libegl-mesa0 libgles2 mesa-vulkan-drivers libvulkan1 mesa-utils >/dev/null 2>&1
                 mkdir -p run/mods
                 cp libs/create-fly-26.3.jar run/mods/
-                printf 'pauseOnLostFocus:false\nonboardAccessibility:false\ntutorialStep:none\nnarrator:0\nrenderDistance:6\nguiScale:2\nmaxFps:30\nsoundCategory_master:0.0\n' > run/options.txt
+                printf 'pauseOnLostFocus:false\nonboardAccessibility:false\ntutorialStep:none\nnarrator:0\nrenderDistance:6\nguiScale:2\nmaxFps:30\nsoundCategory_master:0.0\nkey_key.use:key.keyboard.u\n' > run/options.txt
                 export LIBGL_ALWAYS_SOFTWARE=1
                 # MC 26.3 (SDL3) asks for an sRGB-capable framebuffer; Xvfb's GLX visuals have none, EGL does
                 if [ ! -f .github/smoke-glx ]; then export SDL_VIDEO_FORCE_EGL=1; fi

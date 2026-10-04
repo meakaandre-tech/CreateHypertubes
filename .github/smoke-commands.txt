@@ -1,16 +1,36 @@
-gamerule minecraft:spawn_mobs false
-forceload add -16 -16 31 15
-fill -4 199 -4 24 199 8 minecraft:stone
+say smoke-start
+whitelist off
+gamerule spawn_radius 0
+gamerule spawn_mobs false
+forceload add -16 -32 63 31
+fill -6 199 -20 60 199 18 minecraft:stone
+fill -6 200 -20 60 206 18 minecraft:air
+say == line 1: two entrances 36 blocks apart, 16 rpm
 setblock 0 200 0 create_hypertube:hypertube_entrance[facing=east,locked=false]
-setblock 6 200 0 create_hypertube:hypertube_entrance[facing=west,locked=false]
+setblock 36 200 0 create_hypertube:hypertube_entrance[facing=west,locked=false]
 setblock 0 200 1 create:cogwheel[axis=x]
-setblock -1 200 1 create:creative_motor[facing=east]{ScrollValue:64}
-setblock 10 200 0 create_hypertube:hypertube_accelerator
-setblock 12 200 0 create_hypertube:hypertube_junction
-setblock 14 200 0 create_hypertube:hypertube
+setblock -1 200 1 create:creative_motor[facing=east]{ScrollValue:16}
+setblock 36 200 1 create:cogwheel[axis=x]
+setblock 37 200 1 create:creative_motor[facing=west]{ScrollValue:16}
+say == line 2: entrance, accelerator, junction, two exits, 64 rpm
+setblock 0 200 10 create_hypertube:hypertube_entrance[facing=east,locked=false]
+setblock 0 200 11 create:cogwheel[axis=x]
+setblock -1 200 11 create:creative_motor[facing=east]{ScrollValue:64}
+setblock 8 200 10 create_hypertube:hypertube_accelerator[facing=east]
+setblock 8 200 11 create:cogwheel[axis=x]
+setblock 7 200 11 create:creative_motor[facing=east]{ScrollValue:64}
+setblock 16 200 10 create_hypertube:hypertube_junction[facing=north]
+setblock 24 200 10 create_hypertube:hypertube_entrance[facing=west,locked=false]
+setblock 24 200 11 create:cogwheel[axis=x]
+setblock 25 200 11 create:creative_motor[facing=west]{ScrollValue:64}
+setblock 16 200 4 create_hypertube:hypertube_entrance[facing=south,locked=false]
+setblock 17 200 4 create:cogwheel[axis=z]
+setblock 17 200 5 create:creative_motor[facing=north]{ScrollValue:64}
+setblock 30 200 14 create_hypertube:hypertube
 tick sprint 100
 say CHECK blocks placed
 data get block 0 200 0
-data get block 10 200 0
-data get block 12 200 0
-data get block 14 200 0
+data get block 36 200 0
+data get block 8 200 10
+data get block 16 200 10
+data get block 30 200 14

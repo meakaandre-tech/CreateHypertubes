@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "create_hypertube:hyper_accelerator_small_cogwheel"
+        "recipes": "create_hypertube:hyper_accelerator_small_cogwheel"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
