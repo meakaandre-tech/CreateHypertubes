@@ -95,7 +95,7 @@ sleep 6
 cmd execute as @a run data get entity @s Pos
 key F5
 key F5
-cmd say == villager rides line 1
+cmd say == villager rides line 1 (a ride takes 3.6 s; both ends are open, so it is sent back 2 s after arriving)
 cmd tp @a 18.5 201 -3.5 0 10
 sleep 3
 cmd summon minecraft:villager -0.5 200 0.5 {NoAI:1b}
@@ -103,10 +103,12 @@ sleep 0.9
 shot
 sleep 0.5
 shot
-sleep 0.5
-shot
-sleep 5
+sleep 1.6
 cmd execute as @e[type=minecraft:villager] run data get entity @s Pos
+sleep 0.6
+cmd execute as @e[type=minecraft:villager] run data get entity @s Pos
+cmd tp @e[type=minecraft:villager] 50 200 -15
+sleep 4
 cmd kill @e[type=minecraft:villager]
 cmd say == ride line 2 (accelerator, junction)
 cmd tp @a -0.5 200 10.5 -90 0
@@ -121,7 +123,7 @@ sleep 3
 cmd execute as @a run data get entity @s Pos
 cmd say == goggles on the entrance
 cmd item replace entity @a armor.head with create:goggles
-cmd tp @a -2.5 200 2.5 -140 20
+cmd tp @a -2.8 200 0.5 -90 20
 sleep 4
 shot
 cmd say == ponder
@@ -131,60 +133,74 @@ cmd item replace entity @a hotbar.1 with create_hypertube:redstone_detector_tube
 cmd item replace entity @a hotbar.2 with create_hypertube:hypertube_junction
 cmd item replace entity @a hotbar.3 with create_hypertube:hypertube_accelerator
 cmd item replace entity @a hotbar.4 with create_hypertube:hypertube_entrance
-cmd item replace entity @a hotbar.5 with create_hypertube:tube_scanner_attachment
 sleep 3
 key e
 sleep 3
 move 479 464
 sleep 2
-shot
 keydown w
 sleep 4
 keyup w
-sleep 6
+sleep 7
 shot
-sleep 10
+sleep 9
 shot
 key Escape
 sleep 2
+key e
+sleep 3
 move 515 464
 sleep 2
 keydown w
 sleep 4
 keyup w
-sleep 8
+sleep 7
 shot
-sleep 10
+sleep 9
+shot
+sleep 9
 shot
 key Escape
 sleep 2
+key e
+sleep 3
 move 551 464
 sleep 2
 keydown w
 sleep 4
 keyup w
-sleep 12
+sleep 7
+shot
+sleep 9
+shot
+sleep 9
 shot
 key Escape
 sleep 2
+key e
+sleep 3
 move 587 464
 sleep 2
 keydown w
 sleep 4
 keyup w
-sleep 12
+sleep 7
+shot
+sleep 9
 shot
 key Escape
 sleep 2
+key e
+sleep 3
 move 623 464
 sleep 2
 keydown w
 sleep 4
 keyup w
-sleep 12
+sleep 7
 shot
-key Escape
-sleep 2
+sleep 9
+shot
 key Escape
 sleep 2
 shot

@@ -6,12 +6,13 @@ data get block 36 200 0 HypertubeConnections
 data get block 8 200 10 HypertubeConnections
 data get block 16 200 10 HypertubeConnections
 data get block 16 200 4 HypertubeConnections
-say == a villager rides line 1 after the restart
-summon minecraft:villager -0.5 200 0.5 {NoAI:1b}
-#sleep 8
-execute as @e[type=minecraft:villager] run data get entity @s Pos
-kill @e[type=minecraft:villager]
-say == a villager rides line 2 after the restart
-summon minecraft:villager -0.5 200 10.5 {NoAI:1b}
-#sleep 8
-execute as @e[type=minecraft:villager] run data get entity @s Pos
+say == a villager rides line 1 after the restart (3.6 s; expected at the far end, x 38)
+summon minecraft:villager -0.5 200 0.5 {NoAI:1b,Tags:["a"]}
+#sleep 4.4
+execute as @e[tag=a] run data get entity @s Pos
+say == a villager rides line 2 after the restart (expected past the far entrance, x 25.5 z 10.5, or the side one, x 16.5 z 3)
+summon minecraft:villager -0.5 200 10.5 {NoAI:1b,Tags:["b"]}
+#sleep 2.5
+execute as @e[tag=b] run data get entity @s Pos
+#sleep 0.5
+execute as @e[tag=b] run data get entity @s Pos
