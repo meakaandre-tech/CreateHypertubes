@@ -20,7 +20,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LeverBlock;
-import net.minecraft.world.level.block.RedStoneWireBlock;
+import net.minecraft.world.level.block.RedstoneWireBlock;
 import net.minecraft.world.level.block.RedstoneLampBlock;
 import net.minecraft.world.level.block.state.properties.AttachFace;
 import net.minecraft.world.level.block.state.properties.RedstoneSide;
@@ -88,10 +88,10 @@ public class AttachmentScenes {
 
         // REDSTONE THING
         scene.world().modifyBlock(redstonePos, state -> {
-            return state.setValue(RedStoneWireBlock.NORTH, RedstoneSide.SIDE)
-                    .setValue(RedStoneWireBlock.SOUTH, RedstoneSide.SIDE)
-                    .setValue(RedStoneWireBlock.EAST, RedstoneSide.NONE)
-                    .setValue(RedStoneWireBlock.WEST, RedstoneSide.NONE);
+            return state.setValue(RedstoneWireBlock.NORTH, RedstoneSide.SIDE)
+                    .setValue(RedstoneWireBlock.SOUTH, RedstoneSide.SIDE)
+                    .setValue(RedstoneWireBlock.EAST, RedstoneSide.NONE)
+                    .setValue(RedstoneWireBlock.WEST, RedstoneSide.NONE);
         }, false);
         scene.idle(5);
         scene.world().showSection(redstoneCircuitS, Direction.SOUTH);
@@ -221,7 +221,7 @@ public class AttachmentScenes {
     }
 
     private static void changeToPower(BlockPos pos, CreateSceneBuilder scene, int power) {
-        scene.world().modifyBlock(pos, state -> state.setValue(RedStoneWireBlock.POWER, power), false);
+        scene.world().modifyBlock(pos, state -> state.setValue(RedstoneWireBlock.POWER, power), false);
     }
 
     private static void setSystemSpeed(SceneBuildingUtil util, CreateSceneBuilder scene, int entranceSpeed) {
