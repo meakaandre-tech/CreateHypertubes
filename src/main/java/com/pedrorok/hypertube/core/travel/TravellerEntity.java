@@ -22,9 +22,9 @@ public record TravellerEntity(Function<LivingEntity, Consumer<PoseStack>> render
             float pitch = data != null ? data.getPitch() : entity.getXRot();
             return poseStack -> {
             poseStack.translate(0, 0.2, 0);
-            poseStack.mulPose(Axis.YP.rotationDegrees(-yaw));
-            poseStack.mulPose(Axis.XP.rotationDegrees(pitch + 90));
-            poseStack.mulPose(Axis.YP.rotationDegrees(yaw));
+            poseStack.rotate(Axis.YP.rotationDegrees(-yaw));
+            poseStack.rotate(Axis.XP.rotationDegrees(pitch + 90));
+            poseStack.rotate(Axis.YP.rotationDegrees(yaw));
             poseStack.translate(0, translateY, 0);
             poseStack.scale(0.8f, 0.8f, 0.8f);
             };
@@ -39,10 +39,10 @@ public record TravellerEntity(Function<LivingEntity, Consumer<PoseStack>> render
             float xRot = entity.getXRot();
             return poseStack -> {
             poseStack.translate(0, 0.1, 0);
-            poseStack.mulPose(Axis.YP.rotationDegrees(-yRot + 90));
-            poseStack.mulPose(Axis.ZP.rotationDegrees(xRot));
-            poseStack.mulPose(Axis.XP.rotationDegrees(-90));
-            poseStack.mulPose(Axis.YP.rotationDegrees(yRot - 90));
+            poseStack.rotate(Axis.YP.rotationDegrees(-yRot + 90));
+            poseStack.rotate(Axis.ZP.rotationDegrees(xRot));
+            poseStack.rotate(Axis.XP.rotationDegrees(-90));
+            poseStack.rotate(Axis.YP.rotationDegrees(yRot - 90));
             poseStack.translate(0, -0.1, 0);
             poseStack.scale(size, size, size);
             };
@@ -57,9 +57,9 @@ public record TravellerEntity(Function<LivingEntity, Consumer<PoseStack>> render
             float xRot = entity.getXRot();
             return poseStack -> {
             poseStack.translate(0, 0.1, 0);
-            poseStack.mulPose(Axis.YP.rotationDegrees(-yRot));
-            poseStack.mulPose(Axis.XP.rotationDegrees(xRot));
-            poseStack.mulPose(Axis.YP.rotationDegrees(yRot));
+            poseStack.rotate(Axis.YP.rotationDegrees(-yRot));
+            poseStack.rotate(Axis.XP.rotationDegrees(xRot));
+            poseStack.rotate(Axis.YP.rotationDegrees(yRot));
             poseStack.translate(0, -0.1, 0);
             poseStack.scale(size, size, size);
             };

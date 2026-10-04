@@ -6,7 +6,6 @@ import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
-import org.lwjgl.glfw.GLFW;
 
 /**
  * @author Rok, Pedro Lucas nmm. Created on 28/07/2025
@@ -14,7 +13,7 @@ import org.lwjgl.glfw.GLFW;
  */
 public enum ModKeybinds {
 
-    ESCAPE("tube_escape", GLFW.GLFW_KEY_LEFT_SHIFT);
+    ESCAPE("tube_escape", InputConstants.KEY_LSHIFT);
 
     public static final KeyMapping.Category CATEGORY = new KeyMapping.Category(HypertubeMod.of("hypertube"));
 
@@ -33,7 +32,7 @@ public enum ModKeybinds {
 
     private boolean isKeyPressed() {
         int keyCode = KeyMappingHelper.getBoundKeyOf(mapping).getValue();
-        return InputConstants.isKeyDown(Minecraft.getInstance().getWindow(), keyCode);
+        return InputConstants.isKeyDown(keyCode);
     }
 
     public Component message() {

@@ -35,7 +35,7 @@ public class ModBlocks {
                 .explosionResistance(10.0f)
                 .sound(SoundType.METAL)
                 .noOcclusion()
-                .isViewBlocking((state, level, pos) -> false)
+                .isViewBlocking((state, level, pos, box) -> false)
                 .isSuffocating((state, level, pos) -> false);
     }
 
@@ -54,7 +54,7 @@ public class ModBlocks {
                     .strength(-1.0F, 3600000.0F)
                     .noOcclusion()
                     .noLootTable()
-                    .isViewBlocking((state, level, pos) -> false)
+                    .isViewBlocking((state, level, pos, box) -> false)
                     .isSuffocating((state, level, pos) -> false),
             null
     );

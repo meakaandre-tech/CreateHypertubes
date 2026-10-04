@@ -193,7 +193,7 @@ public class TravelManager {
             entity.teleportTo((ServerLevel) level, lastBlockPos.x, lastBlockPos.y, lastBlockPos.z, Relative.ROTATION, 0f, 0f, false);
         }
         entity.setDeltaMovement(lastDir.scale(Math.max(finalSpeed, 1f)));
-        entity.hurtMarked = true;
+        entity.syncVelocity = true;
 
         entity.setPose(Pose.SWIMMING);
 
